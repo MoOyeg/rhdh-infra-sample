@@ -111,7 +111,7 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
 
 ### Clean Up 
   ```bash
-  cat ./rhdh-manifests/keycloak/app-config-rhdh.yaml  | envsubst '${NAMESPACE}' | oc delete -n ${NAMESPACE} -f - ; \
+  export NAMESPACE=backstage-test;cat ./rhdh-manifests/keycloak/app-config-rhdh.yaml  | envsubst '${NAMESPACE}' | oc delete -n ${NAMESPACE} -f - ; \
   oc kustomize ./sso-manifests | envsubst | oc delete -f - ; \
   oc kustomize ./sso-operator/ | envsubst | oc delete -f - ; \
   oc kustomize ./namespace | envsubst | oc delete -f -
