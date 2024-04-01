@@ -1,9 +1,9 @@
 # RHDH Infra Samples
 
-This repository provides sample files and instructions to play with Red Hat Developer Hub(Backstage) and different types of Infrastructure. 
+This repository provides sample files and instructions to play with Red Hat Developer Hub(Backstage) and different types of Infrastructure integrations. it's open to contributions
 
 
-## Sample 1 - Authentication
+## Sample 1 - Authentication with Red Hat SSO(keycloak) via OIDC
 The below sample will:   
   - Create a project in OCP  
   - Install Red Hat SSO for OIDC authentication
