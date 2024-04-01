@@ -1,0 +1,22 @@
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakUser
+metadata:
+  name: backstage-user2
+  namespace: ${NAMESPACE}
+spec:
+  user:
+    username: "user2"
+    email: "user2@test.com"
+    enabled: True
+    emailVerified: True
+    credentials:
+      - type: "password"
+        value: "test"
+        temporary: false
+    realmRoles:
+      - "offline_access"
+      - "uma_authorization"
+      - "user"
+  realmSelector:
+    matchLabels:
+      app: sso-backstage-sample

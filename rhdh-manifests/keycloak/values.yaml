@@ -1,0 +1,69 @@
+global:
+  auth:
+    backend:
+      enabled: true
+  dynamic:
+    includes:
+      - dynamic-plugins.default.yaml
+    plugins:
+      - disabled: false
+        package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-rbac 
+      - disabled: false
+        package: >-
+          ./dynamic-plugins/dist/janus-idp-backstage-plugin-keycloak-backend-dynamic
+upstream:
+  backstage:
+    extraAppConfig:
+      - configMapRef: app-config-rhdh
+        filename: app-config-rhdh.yaml
+    extraEnvVars:
+      - name: NODE_TLS_REJECT_UNAUTHORIZED
+        value: '0'
+      - name: BACKEND_SECRET
+        valueFrom:
+          secretKeyRef:
+            key: backend-secret
+            name: '{{ include "janus-idp.backend-secret-name" $ }}'
+      - name: POSTGRESQL_ADMIN_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: postgres-password
+            name: '{{- include "janus-idp.postgresql.secretName" . }}'
+    extraEnvVarsSecrets:
+      - backstage-sso-secret
+    extraVolumeMounts:
+      - mountPath: /opt/app-root/src/dynamic-plugins-root
+        name: dynamic-plugins-root
+      - mountPath: /opt/app-root/src/rbac
+        name: rbac-policy
+    extraVolumes:
+      # -- Ephemeral volume that will contain the dynamic plugins installed by the initContainer below at start.
+      - name: dynamic-plugins-root
+        ephemeral:
+          volumeClaimTemplate:
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  # -- Size of the volume that will contain the dynamic plugins. It should be large enough to contain all the plugins.
+                  storage: 2Gi
+      # Volume that will expose the `dynamic-plugins.yaml` file from the `dynamic-plugins` config map.
+      # The `dynamic-plugins` config map is created by the helm chart from the content of the `global.dynamic` field.
+      - name: dynamic-plugins
+        configMap:
+          defaultMode: 420
+          name: dynamic-plugins
+          optional: true
+      # Optional volume that allows exposing the `.npmrc` file (through a `dynamic-plugins-npmrc` secret)
+      # to be used when running `npm pack` during the dynamic plugins installation by the initContainer.
+      - name: dynamic-plugins-npmrc
+        secret:
+          defaultMode: 420
+          optional: true
+          secretName: dynamic-plugins-npmrc
+      - name: rbac-policy
+        configMap:
+          defaultMode: 420
+          name: rbac-policy
+          optional: true

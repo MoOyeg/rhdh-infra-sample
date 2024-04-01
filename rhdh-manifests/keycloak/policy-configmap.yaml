@@ -1,0 +1,31 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: rbac-policy
+  namespace: ${NAMESPACE}
+data:
+  rbac-policy.csv: |
+    p, role:default/catalog-admin, catalog-entity.read, read
+    p, role:default/catalog-admin, catalog.entity.refresh, update
+    p, role:default/catalog-admin, catalog.entity.create, create
+    p, role:default/catalog-admin, catalog.entity.delete, delete
+    p, role:default/catalog-admin, catalog.location.read, read
+    p, role:default/catalog-admin, catalog.location.create, create
+    p, role:default/catalog-admin, catalog.location.delete, delete
+    p, role:default/catalog-reader, catalog.location.read, read
+    p, role:default/catalog-reader, catalog-entity, read
+    p, role:default/scaffolder-admin, scaffolder.template, read
+    p, role:default/scaffolder-admin, scaffolder.template.parameter.read, read
+    p, role:default/scaffolder-admin, scaffolder.template.step.read, read
+    p, role:default/scaffolder-admin, scaffolder.action.execute, use
+    p, role:default/scaffolder-admin, scaffolder.action, use
+    p, role:default/rbac-admin, policy.entity.read, read
+    p, role:default/rbac-admin, policy.entity.create, create
+    p, role:default/rbac-admin, policy.entity.update, update
+    p, role:default/rbac-admin, policy.entity.delete, delete
+    p, role:default/rbac-admin, kubernetes.proxy, use
+    p, user:default/* role:default/catalog-reader
+    g, user:default/admin, role:default/rbac_admin
+    g, user:default/admin, role:default/catalog-admin
+    g, user:default/admin, role:default/scaffolder-admin
+    g, user:default/user1, role:default/catalog-admin

@@ -1,0 +1,48 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: app-config-rhdh
+  namespace: ${NAMESPACE}
+data:
+  app-config-rhdh.yaml: |
+    app:
+      title: Red Hat Developer Hub - Test
+    
+    permission:
+      enabled: true
+      rbac:
+        admin:
+          users:
+            - name: user:default/admin
+        policies-csv-file: ./rbac/rbac-policy.csv
+
+    
+    signInPage: oidc
+    catalog:
+      providers:
+        keycloakOrg:
+          default:
+            baseUrl: ${KEYCLOAK_BASE_URL}/auth
+            loginRealm: ${KEYCLOAK_REALM}
+            realm: ${KEYCLOAK_REALM}
+            clientId: ${KEYCLOAK_CLIENT_ID}
+            clientSecret: ${KEYCLOAK_CLIENT_SECRET}
+            schedule: # Mandatory; same options as in TaskScheduleDefinition
+              # supports cron, ISO duration, "human duration" as used in code
+              frequency: { minutes: 30 } # Customize this to fit your needs
+              # supports ISO duration, "human duration" as used in code
+              timeout: { minutes: 3 } # Customize this to fit your needs
+              initialDelay: { seconds: 15 } # Customize this to fit your needs
+
+    auth:
+      session:
+        secret: ${AUTH_SESSION_SECRET}
+
+      environment: production
+      providers:
+        oidc:
+          production:
+            clientId: ${KEYCLOAK_CLIENT_ID}
+            clientSecret: ${KEYCLOAK_CLIENT_SECRET}
+            metadataUrl: ${KEYCLOAK_BASE_URL}/auth/realms/${KEYCLOAK_REALM}/.well-known/openid-configuration
+            prompt: auto

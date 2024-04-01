@@ -1,0 +1,8 @@
+resources:
+  - sso-instance.yaml
+  - sso-realm.yaml
+  - sso-client.yaml
+  - sso-backstage-admin.yaml
+  - sso-backstage-user1.yaml
+  - sso-backstage-user2.yaml
+  - backstage-sso-secret.yaml

@@ -1,0 +1,16 @@
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakRealm
+metadata:
+  name: backstage-sso
+  namespace: ${NAMESPACE}
+  labels:
+    app: sso-backstage-sample
+spec:
+  realm:
+    id: "${KEYCLOAK_REALM}"
+    realm: "${KEYCLOAK_REALM}"
+    enabled: True
+    displayName: "Backstage Sample Realm"
+  instanceSelector:
+    matchLabels:
+      app: sso-backstage-sample

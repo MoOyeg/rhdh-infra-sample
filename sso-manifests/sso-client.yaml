@@ -1,0 +1,46 @@
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: backstage-tgm
+  namespace: ${NAMESPACE}
+  labels:
+    app: sso-backstage-sample
+spec:
+  client:
+    clientId: backstage
+    secret: ${BACKSTAGE_CLIENT_SECRET}
+    directAccessGrantsEnabled: true
+    implicitFlowEnabled: true
+    publicClient: false
+    enabled: true
+    bearerOnly: false
+    consentRequired: false
+    standardFlowEnabled: true
+    serviceAccountsEnabled": true
+    clientAuthenticatorType: "client-secret"
+    defaultClientScopes:
+      - "web-origins"
+      - "profile"
+      - "email"
+      - "roles"
+      - "address"
+      - "phone"
+      - "offline_access"
+    redirectUris: 
+      - https://developer-hub-${NAMESPACE}.${BASEDOMAIN}/api/auth/oidc/handler/frame
+    protocolMappers:
+    - name: backstage-uid
+      protocol: openid-connect
+      protocolMapper: "oidc-usermodel-property-mapper"
+      consentRequired: false
+      id: "bee5f236-19a6-4a59-ab14-48b3926de6ca"
+      config:
+        "userinfo.token.claim": "true"
+        "user.attribute": "username"
+        "id.token.claim": "true"
+        "access.token.claim": "true"
+        "claim.name": "sub"
+        "jsonType.label": "String"
+  realmSelector:
+    matchLabels:
+      app: sso-backstage-sample
