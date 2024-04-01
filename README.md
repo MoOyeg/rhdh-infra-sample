@@ -17,7 +17,8 @@ The below sample will:
     - Helm 3.2.0 or later is installed.
     - PersistentVolume provisioner support in the underlying infrastructure is available.
     - Tested with version 1.1.0 of  openshift-helm-charts/redhat-developer-hub
-    - Dependecies of the Chart can change. Please review below for other dependencies.
+    - [yq](https://github.com/mikefarah/yq/releases) > 4
+    - Dependecies of the RHDH Helm Chart can change. Please review below for other dependencies.
     ```bash
     helm show readme --version 1.1.0 openshift-helm-charts/redhat-developer-hub
     ```
@@ -96,22 +97,36 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
     oc wait --for=jsonpath='{.status.ready}'=true --allow-missing-template-keys=true --timeout=120s Keycloak/backstage -n $NAMESPACE
     ```
 
-  - Create our Developer Release via Helm
+  - Update Helm Information
     ```bash
-    helm show values --version 1.1.0 openshift-helm-charts/redhat-developer-hub > ./rhdh-manifests/base/values.yaml
+    helm repo update openshift-helm-charts
+
+    helm show values openshift-helm-charts/redhat-developer-hub --version 1.1.0 > ./rhdh-manifests/base/values.yaml
     ```
 
+- Create our Developer Release via Helm(By Merging files manually)
+    ```bash    
+    yq eval-all '. as $item ireduce ({}; . *+ $item)' ./rhdh-manifests/base/values.yaml ./rhdh-manifests/keycloak/values.yaml  > ./rhdh-manifests/keycloak/values-new.yaml
+
+    helm upgrade -i developer-hub openshift-helm-charts/redhat-developer-hub \
+    --version 1.1.0 \
+    -f ./rhdh-manifests/keycloak/values-new.yaml \
+    -n ${NAMESPACE}
+    ```
+
+<!-- - Create our Developer Release via Helm by providing multiple value files.
     ```bash
-    helm upgrade -i developer-hub \
+    helm upgrade -i developer-hub openshift-helm-charts/redhat-developer-hub \
     --version 1.1.0 \
     -f ./rhdh-manifests/base/values.yaml \
     -f ./rhdh-manifests/keycloak/values.yaml \
-    openshift-helm-charts/redhat-developer-hub -n ${NAMESPACE}
-    ```
+    -n ${NAMESPACE}
+    ``` -->
 
 ### Clean Up 
   ```bash
-  export NAMESPACE=backstage-test;cat ./rhdh-manifests/keycloak/app-config-rhdh.yaml  | envsubst '${NAMESPACE}' | oc delete -n ${NAMESPACE} -f - ; \
+  export NAMESPACE=backstage-test;
+  helm uninstall developer-hub -n ${NAMESPACE};
   oc kustomize ./sso-manifests | envsubst | oc delete -f - ; \
   oc kustomize ./sso-operator/ | envsubst | oc delete -f - ; \
   oc kustomize ./namespace | envsubst | oc delete -f -

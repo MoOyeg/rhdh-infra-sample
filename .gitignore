@@ -6,3 +6,5 @@ sso-secret.yaml
 policy-configmap.yaml
 helm.yaml
 dynamic-plugins-configmap.yaml
+rhdh-manifests/base/values-new.yaml
+rhdh-manifests/keycloak/values-new.yaml
