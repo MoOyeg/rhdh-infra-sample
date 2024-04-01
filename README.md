@@ -12,14 +12,14 @@ The below sample will:
   - Give admin user the admin role, user1 the catalog-admin role and user2 is a standard user.
 
 ### Requirements
-    - OCP Cluster => 4.12
-    - oc command line tool
-    - Helm 3.2.0 or later is installed.
-    - PersistentVolume provisioner support in the underlying infrastructure is available.
-    - Tested with version 1.1.0 of  openshift-helm-charts/redhat-developer-hub
-    - [yq](https://github.com/mikefarah/yq/releases) > 4
-    - Dependecies of the RHDH Helm Chart can change. Please review below for other dependencies.
-    ```bash
+  - OCP Cluster => 4.12
+  - oc command line tool
+  - Helm 3.2.0 or later is installed.
+  - PersistentVolume provisioner support in the underlying infrastructure is available.
+  - Tested with version 1.1.0 of  openshift-helm-charts/redhat-developer-hub
+  - [yq](https://github.com/mikefarah/yq/releases) > 4
+  - Dependecies of the RHDH Helm Chart can change. Please review below for other dependencies.
+     ```bash
     helm show readme --version 1.1.0 openshift-helm-charts/redhat-developer-hub
     ```
 
