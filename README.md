@@ -1,4 +1,4 @@
-# Repository Name
+# RHDH Infra Samples
 
 This repository provides sample files and instructions to play with Red Hat Developer Hub(Backstage) and different types of Infrastructure. 
 
