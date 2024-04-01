@@ -1,0 +1,8 @@
+app-config-rhdh.yaml
+bitbucket-secret.yaml
+github-secret.yaml
+jenkins-secret.yaml
+sso-secret.yaml
+policy-configmap.yaml
+helm.yaml
+dynamic-plugins-configmap.yaml
