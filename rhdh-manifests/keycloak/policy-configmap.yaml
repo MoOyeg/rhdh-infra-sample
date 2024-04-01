@@ -5,31 +5,30 @@ metadata:
   namespace: ${NAMESPACE}
 data:
   rbac-policy.csv: |
-    p, role:default/catalog_admin, catalog-entity, read, update, delete
-    p, role:default/catalog_admin, catalog.entity.read, read
-    p, role:default/catalog_admin, catalog.entity.refresh, update
-    p, role:default/catalog_admin, catalog.entity.create, create
-    p, role:default/catalog_admin, catalog.entity.delete, delete
+    p, role:default/catalog_admin, catalog-entity, read, update, delete, allow
+    p, role:default/catalog_admin, catalog.entity.read, read, allow
+    p, role:default/catalog_admin, catalog.entity.refresh, update, allow
+    p, role:default/catalog_admin, catalog.entity.create, create, allow
+    p, role:default/catalog_admin, catalog.entity.delete, delete, allow
 
-    p, role:default/catalog_admin, catalog.location.read, read
-    p, role:default/catalog_admin, catalog.location.create, create
-    p, role:default/catalog_admin, catalog.location.delete, delete
+    p, role:default/catalog_admin, catalog.location.read, read, allow
+    p, role:default/catalog_admin, catalog.location.create, create, allow
+    p, role:default/catalog_admin, catalog.location.delete, delete, allow
 
-    p, role:default/catalog_reader, catalog.location.read, read
-    p, role:default/catalog_reader, catalog.entity.read, read
+    p, role:default/catalog_reader, catalog.location.read, read, allow
+    p, role:default/catalog_reader, catalog.entity.read, read, allow
 
-    p, role:default/scaffolder_admin, scaffolder.template, read
-    p, role:default/scaffolder_admin, scaffolder.template.parameter.read, read
-    p, role:default/scaffolder_admin, scaffolder.template.step.read, read
-    p, role:default/scaffolder_admin, scaffolder.action.execute, use
-    p, role:default/scaffolder_admin, scaffolder.action, use
+    p, role:default/scaffolder_admin, scaffolder.template, read, allow
+    p, role:default/scaffolder_admin, scaffolder.template.parameter.read, read, allow
+    p, role:default/scaffolder_admin, scaffolder.template.step.read, read, allow
+    p, role:default/scaffolder_admin, scaffolder.action.execute, use, allow
+    p, role:default/scaffolder_admin, scaffolder.action, use, allow
 
-    p, role:default/rbac_admin, policy.entity.read, read
-    p, role:default/rbac_admin, policy.entity.create, create
-    p, role:default/rbac_admin, policy.entity.update, update
-    p, role:default/rbac_admin, policy.entity.delete, delete
-    p, role:default/rbac_admin, kubernetes.proxy, use
-   
+    p, role:default/rbac_admin, policy.entity.read, read, allow
+    p, role:default/rbac_admin, policy.entity.create, create, allow
+    p, role:default/rbac_admin, policy.entity.update, update, allow
+    p, role:default/rbac_admin, policy.entity.delete, delete, allow
+    p, role:default/rbac_admin, kubernetes.proxy, use, allow
 
     g, user:default/admin, role:default/rbac_admin
     g, user:default/admin, role:default/catalog_admin
