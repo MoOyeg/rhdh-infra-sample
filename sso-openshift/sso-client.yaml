@@ -1,0 +1,6 @@
+spec:
+  client:
+    redirectUris: 
+      - https://oauth-openshift.${BASEDOMAIN}/oauth2callback/openid-keycloak
+
+

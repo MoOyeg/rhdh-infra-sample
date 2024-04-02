@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: 'jenkins-test'
+  description: 'jenkins-descripition-test'
+  annotations:
+    jenkins.io/job-full-name: '1234-jenkins/testflask-pipeline' # use this instead
+
+spec:
+  type: service
+  lifecycle: experimental
+  owner: your-name

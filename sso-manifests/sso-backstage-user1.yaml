@@ -5,7 +5,7 @@ metadata:
   namespace: ${NAMESPACE}
 spec:
   user:
-    username: "user1"
+    username: "backstage-user1"
     email: "user1@test.com"
     enabled: True
     emailVerified: True
