@@ -21,18 +21,16 @@ data:
     catalog:
       providers:
         keycloakOrg:
-          default:
+          production:
             baseUrl: ${KEYCLOAK_BASE_URL}/auth
             loginRealm: ${KEYCLOAK_REALM}
             realm: ${KEYCLOAK_REALM}
             clientId: ${KEYCLOAK_CLIENT_ID}
             clientSecret: ${KEYCLOAK_CLIENT_SECRET}
-            schedule: # Mandatory; same options as in TaskScheduleDefinition
-              # supports cron, ISO duration, "human duration" as used in code
-              frequency: { minutes: 30 } # Customize this to fit your needs
-              # supports ISO duration, "human duration" as used in code
-              timeout: { minutes: 3 } # Customize this to fit your needs
-              initialDelay: { seconds: 15 } # Customize this to fit your needs
+            schedule:
+              frequency: { seconds: 30 }
+              timeout: { minutes: 3 }
+              initialDelay: { seconds: 30 }
 
     auth:
       session:
