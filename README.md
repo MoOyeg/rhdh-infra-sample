@@ -7,9 +7,9 @@ This repository provides sample files and instructions to play with Red Hat Deve
 The below sample will:   
   - Create a project in OCP  
   - Install Red Hat SSO for OIDC authentication
-  - Create a Red Hat SSO Instance Instance,Realm and 3 Users(admin,user1,user2)  
+  - Create a Red Hat SSO Instance Instance,Realm and 3 Users(backstage-admin,backstage-user1,backstage-user2) with a default password of "test"
   - Install Red Hat Developer Hub via Helm  
-  - Give admin user the admin role, user1 the catalog-admin role and user2 is a standard user.
+  - Give backstage-admin user the admin role, backstage-user1 the catalog-admin role and backstage-user2 is a standard user.
 
 ### Requirements
     - OCP Cluster => 4.12

@@ -7,6 +7,20 @@ metadata:
     app: sso-backstage-sample
 spec:
   realm:
+    roles:
+      realm:
+        - name: "priv-client"          
+          description: "Client that need's access to read users,groups"
+          composite: true
+          composites:
+            client:
+              realm-management:
+                - "query-users"
+                - "query-clients"
+                - "view-users"
+                - "query-groups"
+          clientRole: false
+          containerId: "backstage"
     id: "${KEYCLOAK_REALM}"
     realm: "${KEYCLOAK_REALM}"
     enabled: True
