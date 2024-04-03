@@ -31,8 +31,8 @@ data:
     p, role:default/rbac_admin, policy.entity.delete, delete, allow
     p, role:default/rbac_admin, kubernetes.proxy, use, allow
 
-    g, user:default/backstage-admin, role:default/rbac_admin
-    g, user:default/backstage-admin, role:default/catalog_admin
-    g, user:default/backstage-admin, role:default/scaffolder_admin
-    g, user:default/backstage-user1, role:default/catalog_admin
-    g, user:default/:id, role:default/catalog_reader
+    g, group:default/backstage-admin, role:default/rbac_admin
+    g, group:default/backstage-admin, role:default/catalog_admin
+    g, group:default/backstage-admin, role:default/scaffolder_admin
+    g, group:default/backstage-catalog-admin, role:default/catalog_admin
+    g, group:default/backstage-user, role:default/catalog_reader

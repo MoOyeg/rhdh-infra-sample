@@ -9,6 +9,8 @@ spec:
     email: "user2@test.com"
     enabled: True
     emailVerified: True
+    groups:
+      - "backstage-user"
     credentials:
       - type: "password"
         value: "test"

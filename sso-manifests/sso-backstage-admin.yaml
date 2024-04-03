@@ -9,6 +9,9 @@ spec:
     email: "admin@test.com"
     enabled: True
     emailVerified: True
+    groups:
+      - "backstage-admin"
+      - "backstage-user"
     credentials:
       - type: "password"
         value: "test"
