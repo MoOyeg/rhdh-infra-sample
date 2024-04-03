@@ -9,4 +9,4 @@ metadata:
 spec:
   type: service
   lifecycle: experimental
-  owner: your-name
+  owner: user:default/backstage-admin
