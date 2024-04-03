@@ -132,7 +132,7 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
   oc kustomize ./namespace | envsubst | oc delete -f -
   ```
 
-## Sample 2 - RHDH and Jenkins with Keycloak
+<!-- ## Sample 2 - RHDH and Jenkins with Keycloak
  Show Jenkins integration using Jenkins on OpenShift and Keycloak for authentication
 
 
@@ -142,9 +142,9 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
 
 ### Steps
 
-  - Run steps from [Sample 1](#sample-1---authentication-with-red-hat-ssokeycloak-via-oidc) above
+  - Run steps from [Sample 1](#sample-1---authentication-with-red-hat-ssokeycloak-via-oidc) above -->
 
-  - We need to delete and recreate our keycloak client to support OpenShift Auth
+  <!-- - We need to delete and recreate our keycloak client to support OpenShift Auth
     ```bash
     cat ./sso-manifests/sso-client.yaml | envsubst | oc delete -f -
     ```
@@ -162,8 +162,8 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
   - Patch Openshift to add Keycloak as Identity Provider
   ```bash
   oc patch oauth.config.openshift.io/cluster --type=json -p $(cat ./sso-openshift/oauth-identity-provider.json  | envsubst | jq -c)
-  ```
-
+  ``` -->
+<!-- 
   - As an example of a Jenkins Pipeline on OCP I am using a previously written Jenkins Example(https://github.com/MoOyeg/testFlask-Jenkins#steps-to-run). Clone that repo to a seperate folder and follow the steps. After the steps you should have a Jenkins Install on OCP and Sample Python Application.
   
   - The below steps are to automatically help obtain the Jenkins API Token to be used for the backstage plugin. You can skip the below steps and manually provision your token if you are not using jenkins on OCP. Steps should work for any OpenShift Jenkins template that had the OPENSHIFT_ENABLED_OAUTH=true.
@@ -218,4 +218,4 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
     --version 1.1.0 \
     -f ./jenkins/values-new.yaml \
     -n ${NAMESPACE}
-    ```
+    ``` -->
