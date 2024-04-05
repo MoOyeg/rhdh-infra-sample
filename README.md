@@ -134,7 +134,7 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
     -n ${NAMESPACE}
     ``` -->
 
-### Clean Up 
+### Clean Up - Sample 1
   ```bash
   export NAMESPACE=backstage-test;
   helm uninstall developer-hub -n ${NAMESPACE};
@@ -263,3 +263,14 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
     ![Jenkins CI](./images/rhdh-component-jenkins-2.png)
 
     ![Jenkins CI](./images/rhdh-jenkins.png)
+
+
+### Clean Up - Sample 2  
+
+  - Clean up Sample 2
+    ```bash
+    ./jenkins/deploy/deploy-script.sh cleanup 
+
+    ```
+
+  -  [Clean Up Sample 1](#clean-up-sample-1)
