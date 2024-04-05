@@ -114,6 +114,17 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
     -n ${NAMESPACE}
     ```
 
+- It takes a few minutes , but Developer Hub should become available at
+   ```bash
+   oc get route developer-hub -n ${NAMESPACE} -o jsonpath='{.spec.host}'
+   ```
+
+![Login Page](./images/rhdh-oidc-login.png)
+
+![Login OIDC Redirect](./images/rhdh-oidc-login-entry.png)
+
+![Existing Users](./images/rhdh-oidc-users.png)
+
 <!-- - Create our Developer Release via Helm by providing multiple value files.
     ```bash
     helm upgrade -i developer-hub openshift-helm-charts/redhat-developer-hub \
@@ -132,7 +143,7 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
   oc kustomize ./namespace | envsubst | oc delete -f -
   ```
 
-<!-- ## Sample 2 - RHDH and Jenkins with Keycloak
+## Sample 2 - RHDH and Jenkins with Keycloak
  Show Jenkins integration using Jenkins on OpenShift and Keycloak for authentication
 
 
@@ -142,9 +153,11 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
 
 ### Steps
 
-  - Run steps from [Sample 1](#sample-1---authentication-with-red-hat-ssokeycloak-via-oidc) above -->
+  - Run steps from [Sample 1](#sample-1---authentication-with-red-hat-ssokeycloak-via-oidc) above to deploy Keycloak
 
-  <!-- - We need to delete and recreate our keycloak client to support OpenShift Auth
+  <!-- - To use the Jenkins Plugin we need an API Token which requires a user for that. In this example we use the backstage-admin user that is created. To do this we need to need add our keycloak user via OpenShift oauth.
+
+  - We need to delete and recreate our keycloak client to support OpenShift Auth
     ```bash
     cat ./sso-manifests/sso-client.yaml | envsubst | oc delete -f -
     ```
@@ -155,20 +168,34 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
     ```
   
   - Add Keycloak Backstage client secret to Openshift
-  ```bash
-  cat ./sso-openshift/oauth-sso-secret.yaml | envsubst | oc apply -f -
-  ```
+    ```bash
+    cat ./sso-openshift/oauth-sso-secret.yaml | envsubst | oc apply -f -
+    ```
 
-  - Patch Openshift to add Keycloak as Identity Provider
-  ```bash
-  oc patch oauth.config.openshift.io/cluster --type=json -p $(cat ./sso-openshift/oauth-identity-provider.json  | envsubst | jq -c)
-  ``` -->
-<!-- 
-  - As an example of a Jenkins Pipeline on OCP I am using a previously written Jenkins Example(https://github.com/MoOyeg/testFlask-Jenkins#steps-to-run). Clone that repo to a seperate folder and follow the steps. After the steps you should have a Jenkins Install on OCP and Sample Python Application.
-  
-  - The below steps are to automatically help obtain the Jenkins API Token to be used for the backstage plugin. You can skip the below steps and manually provision your token if you are not using jenkins on OCP. Steps should work for any OpenShift Jenkins template that had the OPENSHIFT_ENABLED_OAUTH=true.
+  - Patch OpenShift to add Keycloak as Identity Provider
+    ```bash
+    if [ -z $(oc get oauth cluster -o jsonpath='{.spec.identityProviders}') ];then cat ./sso-openshift/oauth.yaml  | envsubst | oc apply -f - ;else oc patch oauth cluster --type=json -p=$(cat ./sso-openshift/oauth-identity-provider.json  | envsubst | jq -c) ;fi
+    ```
 
-  - Set your jenkins namespace. The below command sets the jenkins namespace used from my jenkins example above.
+  - Log in as backstage user to get it's Openshift bearer token
+    ```bash
+    export JENKINS_USERNAME=backstage-admin
+    export OCP_API_SERVER=$(oc whoami --show-server)
+    RETRY_COUNTER=5
+    while [ -z ${USER_TOKEN} ];do sleep 10 && \
+    echo -e "Trying to get OpenShift Bearer token for ${JENKINS_USERNAME}\n" && \
+    USER_TOKEN=$(/bin/bash -c "unset KUBECONFIG && oc login -u ${JENKINS_USERNAME} -p test $OCP_API_SERVER 1>/dev/null && oc whoami --show-token") && \
+    RETRY_COUNTER=$(( RETRY_COUNTER - 1 ));done 
+    ```-->
+
+  - Let's start the deploy for a Jenkins Example
+
+  - Set your jenkins namespace.An example Jenkins Installation and pipeline are provided. The below command should spin up a Jenkins Instance in namespace 1234-Jenkins, build an agent image and run the pipeline build
+
+    ```bash
+    ./jenkins/deploy/deploy-script.sh
+    ```
+  - set namespace for Jenkins(From our example above it's 1234-jenkins)
     ```bash
     export JENKINS_NAMESPACE=1234-jenkins
     ```
@@ -180,7 +207,7 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
 
   - Set Jenkins username, for example above we use the SA. If different use yours
     ```bash
-    export JENKINS_USERNAME="system:serviceaccount:${JENKINS_NAMESPACE}:${JENKINS_SA}"
+    export JENKINS_USERNAME="system:serviceaccount:${JENKINS_NAMESPACE}:${JENKINS_SA}-admin-edit-view"
     ```
   - Obtain Jenkins route
     ```bash
@@ -191,9 +218,11 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
     ```bash
     TOKEN_SECRET_NAME=$(oc describe sa/${JENKINS_SA} -n ${JENKINS_NAMESPACE} | grep Tokens | head -n 1 | cut -d ":" -f2 | tr -d " ")
 
-    JENKINS_TOKEN=$(oc get secret ${TOKEN_SECRET_NAME} -o=jsonpath={.data.token} -n ${JENKINS_NAMESPACE} | base64 -d)   
+    USER_TOKEN=$(oc get secret ${TOKEN_SECRET_NAME} -o=jsonpath={.data.token} -n ${JENKINS_NAMESPACE} | base64 -d)   
 
-    export JENKINS_API_TOKEN=$(curl -k -X POST -H "Authorization: Bearer ${JENKINS_TOKEN}" "https://${JENKINS_ROUTE}/user/system:serviceaccount:${JENKINS_NAMESPACE}:${JENKINS_SA}/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken" --data 'newTokenName=backstage-token' | jq '.data.tokenValue' | tr -d '"')
+  - Obtain a Jenkins API token
+    ```bash
+    export JENKINS_API_TOKEN=$(curl -k -X POST -H "Authorization: Bearer ${USER_TOKEN}" "https://${JENKINS_ROUTE}/user/${JENKINS_USERNAME}/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken" --data 'newTokenName=backstage-token' | jq '.data.tokenValue' | tr -d '"')
     ```
 
   - We need to create our jenkins secret for backstage to use
@@ -218,4 +247,19 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
     --version 1.1.0 \
     -f ./jenkins/values-new.yaml \
     -n ${NAMESPACE}
-    ``` -->
+    ```
+  
+  - We should now be able to register our Jenkins component and display it
+  ![Create Jenkins Component](./images/rhdh-create-jenkins-component.png)
+
+  - Provide this repo URL to create
+  ![Register Component](./images/rhdh-create-jenkins-url.png)
+
+  - After running through the registration process we should have our component available.
+  ![Component Created](./images/rhdh-component-jenkins.png)
+
+  - With CI information from Jenkins available  
+
+    ![Jenkins CI](./images/rhdh-component-jenkins-2.png)
+
+    ![Jenkins CI](./images/rhdh-jenkins.png)
