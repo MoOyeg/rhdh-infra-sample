@@ -1,0 +1,8 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: bitbucket-template
+  description: Location for BitBucket Templates
+spec:
+  targets:
+    - ./template
