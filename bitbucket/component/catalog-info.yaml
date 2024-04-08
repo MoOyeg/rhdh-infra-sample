@@ -5,4 +5,4 @@ metadata:
   description: Location for BitBucket Templates
 spec:
   targets:
-    - ./template
+    - ../template
