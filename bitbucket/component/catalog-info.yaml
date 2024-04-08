@@ -1,8 +1,10 @@
 apiVersion: backstage.io/v1alpha1
-kind: Location
+kind: Component
 metadata:
   name: bitbucket-template
-  description: Location for BitBucket Templates
+  annotations:
+    github.com/project-slug: bitbucket/template
 spec:
-  targets:
-    - ../template
+  type: other
+  lifecycle: experimental
+  owner: user:default/backstage-admin
