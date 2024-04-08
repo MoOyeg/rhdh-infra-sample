@@ -1,0 +1,8 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: bitbucket-example
+  description: Bitbucket example
+spec:
+  targets:
+    - ./templates
