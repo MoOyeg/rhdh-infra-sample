@@ -274,3 +274,25 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
     ```
 
   -  [Clean Up Sample 1](#clean-up-sample-1)
+
+## Sample 3 
+
+  - Create bitbucket secret
+    ```bash
+    export BITBUCKET_WORKSPACE=MoOyeg
+    cat ./bitbucket/bitbucket-secret.yaml | envsubst | oc apply -f -
+    ```
+
+  - Merge Keycloak Values files with jenkins.
+    ```bash
+    yq eval-all '. as $item ireduce ({}; . *+ $item)' ./rhdh-manifests/base/values.yaml ./rhdh-manifests/keycloak/values.yaml  > ./rhdh-manifests/keycloak/values-new.yaml
+
+    yq eval-all '. as $item ireduce ({}; . *+ $item)' ./rhdh-manifests/keycloak/values-new.yaml ./jenkins/values.yaml  > ./jenkins/values-new.yaml   
+
+    yq eval-all '. as $item ireduce ({}; . *+ $item)' ./rhdh-manifests/keycloak/values-new.yaml ./bitbucket/values.yaml  > ./bitbucket/values-new.yaml       
+
+    helm upgrade -i developer-hub openshift-helm-charts/redhat-developer-hub \
+    --version 1.1.0 \
+    -f ./bitbucket/values-new.yaml \
+    -n ${NAMESPACE}
+    ```

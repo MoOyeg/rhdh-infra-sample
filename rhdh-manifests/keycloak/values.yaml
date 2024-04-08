@@ -3,6 +3,7 @@ global:
     plugins:
       - disabled: false
         package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-rbac 
+
       - disabled: false
         package: >-
           ./dynamic-plugins/dist/janus-idp-backstage-plugin-keycloak-backend-dynamic

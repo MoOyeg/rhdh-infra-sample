@@ -1,0 +1,65 @@
+# Edit the template parameters below to see how they will render in the scaffolder form UI
+parameters:
+  - title: Create a Repo in Bitbucket
+    required:
+      - name
+    properties:
+      name:
+        title: Name
+        type: string
+        description: Unique name of the component
+      owner:
+        title: Owner
+        type: string
+        description: Owner of the component
+        ui:field: OwnerPicker
+        ui:options:
+          catalogFilter:
+            kind: User
+  - title: Provide a Repository Name
+    required:
+      - repoUrl
+    properties:
+      repoUrl:
+        title: Repository Location
+        type: string
+        ui:field: RepoUrlPicker
+        ui:options:
+          allowedHosts:
+            - bitbucket.org
+  - title: Public or Private Repo
+    required:
+      - visibility
+    properties:
+      visibility:
+        title: Visibility
+        type: string
+        enum:
+          - public
+          - private
+        enumNames:
+          - Public
+          - Private
+        ui:field: VisibilityPicker   
+  - title: Provide Bitbucket token
+    required:
+      - token
+    properties:
+      token:
+        title: Bitbucket Token
+        type: string
+        description: Bitbucket token with access to the repository
+        ui:field: TokenPicker
+        ui:options:
+          secret: true        
+steps:
+  - id: create-bitbucket-repo
+    name: Create BitBucket Repository
+    action: publish:bitbucketCloud
+    input:
+      values:
+        repoUrl: ${{parameters.repoUrl}}
+        repoVisibility: ${{parameters.visibility}}
+        defaultBranch: main
+        description: "Repository for ${{parameters.name}}"
+        token: ${{parameters.token}}
