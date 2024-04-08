@@ -3,7 +3,7 @@ kind: Component
 metadata:
   name: bitbucket-template
   annotations:
-    github.com/project-slug: bitbucket/template
+    github.com/project-slug: bitbucket/component/templates
 spec:
   type: other
   lifecycle: experimental
