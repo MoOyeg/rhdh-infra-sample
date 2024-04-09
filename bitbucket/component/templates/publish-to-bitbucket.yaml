@@ -65,7 +65,7 @@ spec:
       action: publish:bitbucketCloud
       input:
         values:
-          repoUrl: {{ '${{parameters.repoUrl}}' }}
+          repoUrl: ${{parameters.repoUrl}}
           repoVisibility: ${{parameters.visibility}}
           defaultBranch: main
           description: "Repository for ${{parameters.name}}"
