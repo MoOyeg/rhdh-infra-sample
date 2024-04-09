@@ -31,12 +31,9 @@ spec:
         - repoUrl
       properties:
         repoUrl:
-          title: Repository Location
+          title: repoUrl
           type: string
-          ui:field: RepoUrlPicker
-          ui:options:
-            allowedHosts:
-              - bitbucket.org
+          description: Repo Name
     - title: Public or Private Repo
       required:
         - visibility

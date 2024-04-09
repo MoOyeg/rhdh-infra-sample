@@ -289,7 +289,7 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
 
     yq eval-all '. as $item ireduce ({}; . *+ $item)' ./rhdh-manifests/keycloak/values-new.yaml ./jenkins/values.yaml  > ./jenkins/values-new.yaml   
 
-    yq eval-all '. as $item ireduce ({}; . *+ $item)' ./rhdh-manifests/keycloak/values-new.yaml ./bitbucket/values.yaml  > ./bitbucket/values-new.yaml       
+    yq eval-all '. as $item ireduce ({}; . *+ $item)' ./jenkins/values-new.yaml ./bitbucket/values.yaml  > ./bitbucket/values-new.yaml       
 
     helm upgrade -i developer-hub openshift-helm-charts/redhat-developer-hub \
     --version 1.1.0 \
