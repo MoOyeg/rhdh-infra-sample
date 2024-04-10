@@ -36,7 +36,7 @@ spec:
           ui:field: RepoUrlPicker
           ui:options:
             allowedHosts:
-              - github.com
+              - bitbucket.com
     - title: Public or Private Repo
       required:
         - visibility
