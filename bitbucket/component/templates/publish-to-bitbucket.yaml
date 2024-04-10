@@ -26,7 +26,7 @@ spec:
           ui:options:
             catalogFilter:
               kind: User
-    - title: Provide a Repository Name
+    - title: Choose a location
       required:
         - repoUrl
       properties:
@@ -36,7 +36,7 @@ spec:
           ui:field: RepoUrlPicker
           ui:options:
             allowedHosts:
-              - bitbucket.com
+              - github.com
     - title: Public or Private Repo
       required:
         - visibility
@@ -67,7 +67,7 @@ spec:
       name: Create BitBucket Repository
       action: publish:bitbucketCloud
       input:
-        repoUrl: '${{ parameters.repoUrl }}'
+        repoUrl: ${{ parameters.repoUrl }}
         repoVisibility: ${{ parameters.visibility }}
         defaultBranch: main
         description: "Repository for ${{ parameters.name }}"
