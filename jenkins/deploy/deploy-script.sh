@@ -91,13 +91,13 @@ metadata:
 spec:
   source:
     git:
-      ref: master
-      uri: 'https://github.com/MoOyeg/testFlask-Jenkins.git'
+      ref: working
+      uri: 'https://github.com/MoOyeg/rhdh-infra-sample'
     type: Git
   strategy:
     type: "JenkinsPipeline"
     jenkinsPipelineStrategy:
-      jenkinsfilePath: Jenkinsfile
+      jenkinsfilePath: jenkins/deploy/Jenkinsfile
 """ | oc create -f -
 
 oc set env bc/$APP_NAME-pipeline \
