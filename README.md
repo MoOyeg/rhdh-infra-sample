@@ -18,7 +18,7 @@ The below sample will:
     - PersistentVolume provisioner support in the underlying infrastructure is available.
     - Tested with version 1.1.0 of  openshift-helm-charts/redhat-developer-hub
     - [yq](https://github.com/mikefarah/yq/releases) > 4
-    - Dependecies of the RHDH Helm Chart can change. Please review below for other dependencies.
+    - Dependencies of the RHDH Helm Chart can change. Please review below for other dependencies.
     ```bash
     helm show readme --version 1.1.0 openshift-helm-charts/redhat-developer-hub
     ```
@@ -76,6 +76,17 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
       oc kustomize ./sso-manifests | envsubst | oc apply -f -
       ```
 
+  - Adding Kubernetes/Topology component integration
+    ```bash
+    export BACKSTAGE_SA=backstage-sa
+    oc create sa ${BACKSTAGE_SA} -n ${NAMESPACE}
+    BACKSTAGE_TOKEN_SECRET=$(oc describe sa/${BACKSTAGE_SA} -n ${NAMESPACE} | grep Tokens | head -n 1 | cut -d ":" -f2 | tr -d " ")
+    export BACKSTAGE_SA_TOKEN=$(oc get secret ${BACKSTAGE_TOKEN_SECRET} -o=jsonpath={.data.token} -n ${NAMESPACE} | base64 -d)
+    export OCP_API_SERVER=$(oc whoami --show-server)
+    export CLUSTER_NAME="cluster-main"
+    oc kustomize ./rhdh-manifests/kube/manifests | envsubst | oc apply -f -    
+    ```
+
   - Create our Application Specific Configuration
     ```bash
     cat ./rhdh-manifests/keycloak/app-config-rhdh.yaml  | envsubst '${NAMESPACE}' | oc apply -n ${NAMESPACE} -f - 
@@ -96,7 +107,7 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
   
     oc wait --for=jsonpath='{.status.ready}'=true --allow-missing-template-keys=true --timeout=120s Keycloak/backstage -n $NAMESPACE
     ```
-
+    
   - Update Helm Information
     ```bash
     helm repo update openshift-helm-charts
@@ -104,35 +115,28 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
     helm show values openshift-helm-charts/redhat-developer-hub --version 1.1.0 > ./rhdh-manifests/base/values.yaml
     ```
 
-- Create our Developer Release via Helm(By Merging files manually)
-    ```bash    
-    yq eval-all '. as $item ireduce ({}; . *+ $item)' ./rhdh-manifests/base/values.yaml ./rhdh-manifests/keycloak/values.yaml  > ./rhdh-manifests/keycloak/values-new.yaml
+  - Create our Developer Release via Helm(By Merging files manually)
+      ```bash    
+      yq eval-all '. as $item ireduce ({}; . *+ $item)' ./rhdh-manifests/base/values.yaml ./rhdh-manifests/keycloak/values.yaml  > ./rhdh-manifests/keycloak/values-new.yaml
 
-    helm upgrade -i developer-hub openshift-helm-charts/redhat-developer-hub \
-    --version 1.1.0 \
-    -f ./rhdh-manifests/keycloak/values-new.yaml \
-    -n ${NAMESPACE}
+      helm upgrade -i developer-hub openshift-helm-charts/redhat-developer-hub \
+      --version 1.1.0 \
+      -f ./rhdh-manifests/keycloak/values-new.yaml \
+      -n ${NAMESPACE}
+      ```
+
+  - It takes a few minutes , but Developer Hub should become available at
+    ```bash
+    oc get route developer-hub -n ${NAMESPACE} -o jsonpath='{.spec.host}'
     ```
 
-- It takes a few minutes , but Developer Hub should become available at
-   ```bash
-   oc get route developer-hub -n ${NAMESPACE} -o jsonpath='{.spec.host}'
-   ```
+    ![Login Page](./images/rhdh-oidc-login.png)
 
-![Login Page](./images/rhdh-oidc-login.png)
+    ![Login OIDC Redirect](./images/rhdh-oidc-login-entry.png)
 
-![Login OIDC Redirect](./images/rhdh-oidc-login-entry.png)
+    ![Existing Users](./images/rhdh-oidc-users.png)
 
-![Existing Users](./images/rhdh-oidc-users.png)
 
-<!-- - Create our Developer Release via Helm by providing multiple value files.
-    ```bash
-    helm upgrade -i developer-hub openshift-helm-charts/redhat-developer-hub \
-    --version 1.1.0 \
-    -f ./rhdh-manifests/base/values.yaml \
-    -f ./rhdh-manifests/keycloak/values.yaml \
-    -n ${NAMESPACE}
-    ``` -->
 
 ### Clean Up - Sample 1
   ```bash
@@ -152,6 +156,7 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
   - Tested with Jenkins OpenShift template with Jenkins OpenShift Oauth
 
 ### Steps
+  - Enable Backstage Kubernetes Integration
 
   - Run steps from [Sample 1](#sample-1---authentication-with-red-hat-ssokeycloak-via-oidc) above to deploy Keycloak
 

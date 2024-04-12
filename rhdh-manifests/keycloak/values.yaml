@@ -3,7 +3,10 @@ global:
     plugins:
       - disabled: false
         package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-rbac 
-
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-kubernetes
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic
       - disabled: false
         package: >-
           ./dynamic-plugins/dist/janus-idp-backstage-plugin-keycloak-backend-dynamic
@@ -17,6 +20,7 @@ upstream:
         value: '0'
     extraEnvVarsSecrets:
       - backstage-sso-secret
+      - backstage-sa-secret
     extraVolumeMounts:
       - mountPath: /opt/app-root/src/rbac
         name: rbac-policy

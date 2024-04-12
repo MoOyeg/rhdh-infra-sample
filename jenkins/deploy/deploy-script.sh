@@ -48,16 +48,46 @@ oc process -f $foldername/template.yaml | oc apply -f - -n ${JENKINS_NAMESPACE}
 oc policy add-role-to-user edit system:serviceaccount:$JENKINS_NAMESPACE:jenkins -n $NAMESPACE_DEV 
 oc policy add-role-to-user edit system:serviceaccount:$JENKINS_NAMESPACE:jenkins -n $NAMESPACE_PROD
 oc policy add-role-to-user edit system:serviceaccount:$JENKINS_NAMESPACE:default -n $NAMESPACE_DEV
-oc policy add-role-to-user edit system:serviceaccount:$JENKINS_NAMESPACE:default -n $NAMESPACE_PROD
+oc policy add-role-to-user edit system:serviceaccount:$JENKINS_NAMESPACE:default -n $
+
+oc create secret generic my-secret \
+--from-literal=MYSQL_USER=$MYSQL_USER \
+--from-literal=MYSQL_PASSWORD=$MYSQL_PASSWORD -n $NAMESPACE_PROD
+
+oc new-app $MYSQL_HOST --env=MYSQL_DATABASE=$MYSQL_DATABASE \
+-l db=mysql -l app=testflask -l backstage.io/kubernetes-id="testflask" \
+-n $NAMESPACE_PROD
+
+oc set env deploy/$MYSQL_HOST --from=secret/my-secret -n $NAMESPACE_PROD
+
+oc new-app python:3.8~https://github.com/MoOyeg/testFlask.git#release-2.0 \
+--name=$APP_NAME -l app=testflask -l backstage.io/kubernetes-id="testflask" \
+--strategy=source --env=APP_CONFIG=./gunicorn/gunicorn.conf.py \
+--env=APP_MODULE=runapp:app --env=MYSQL_HOST=$MYSQL_HOST \
+--env=MYSQL_DATABASE=$MYSQL_DATABASE -n $NAMESPACE_PROD
+
+oc create configmap testflask-gunicorn-config \
+--from-file=./gunicorn/gunicorn.conf.py -n $NAMESPACE_PROD
+
+oc set volume deploy/testflask --add --configmap-name testflask-gunicorn-config \
+--mount-path /app/gunicorn --type configmap -n $NAMESPACE_DEV
+
+oc patch deploy/$APP_NAME --patch "$(cat $foldername/patch-env.json | envsubst)" -n $NAMESPACE_PROD
+
+oc expose svc/$APP_NAME --port 8080 -n $NAMESPACE_PROD
+
 export JENKINS_BASE_IMAGE=registry.redhat.io/openshift4/ose-jenkins-agent-base:v4.10.0
 export PYTHON_DOCKERFILE=$(cat $foldername/Dockerfile | envsubst )
 oc new-build --strategy=docker -D="$PYTHON_DOCKERFILE" --name=python-jenkins -n $JENKINS_NAMESPACE
+
 echo """
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
   name: "$APP_NAME-pipeline"
   namespace: $JENKINS_NAMESPACE
+  labels:
+    backstage.io/kubernetes-id: 'testflask-pipeline'
 spec:
   source:
     git:

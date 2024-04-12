@@ -16,6 +16,27 @@ data:
             - name: user:default/admin
         policies-csv-file: ./rbac/rbac-policy.csv
 
+    kubernetes:
+      serviceLocatorMethod:
+        type: 'multiTenant'
+      clusterLocatorMethods:
+        - type: 'config'
+          clusters:
+            - url: ${OCP_API_SERVER} 
+              name: ${CLUSTER_NAME}
+              authProvider: 'serviceAccount' 
+              skipTLSVerify: true # should be set to 'true' for self-signed certs
+              serviceAccountToken: ${BACKSTAGE_SA_TOKEN} 
+              customResources: 
+                - group: 'route.openshift.io'
+                  apiVersion: 'v1'
+                  plural: 'routes'
+                - group: 'tekton.dev'
+                  apiVersion: 'v1'
+                  plural: 'pipelineruns'
+                - group: 'tekton.dev'
+                  apiVersion: 'v1'
+                  plural: 'taskruns'
     
     signInPage: oidc
     catalog:

@@ -1,0 +1,4 @@
+resources:
+  - backstage-sa-secret.yaml
+  - cluster-role.yaml
+  - clusterrolebinding.yaml

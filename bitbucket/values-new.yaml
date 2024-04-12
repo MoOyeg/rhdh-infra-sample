@@ -14,6 +14,10 @@ global:
       - disabled: false
         package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-rbac
       - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-kubernetes
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic
+      - disabled: false
         package: >-
           ./dynamic-plugins/dist/janus-idp-backstage-plugin-keycloak-backend-dynamic
       - disabled: false
@@ -188,6 +192,7 @@ upstream:
         filename: app-config-rhdh.yaml
     extraEnvVarsSecrets:
       - backstage-sso-secret
+      - backstage-sa-secret
       - jenkins-backstage-secret
       - bitbucket-backstage-secret
   postgresql:
