@@ -5,9 +5,7 @@ metadata:
   description: 'jenkins-descripition-test'
   annotations:
     jenkins.io/job-full-name: '1234-jenkins/1234-jenkins-testflask-pipeline'
-    backstage.io/kubernetes-id: 'nginx-ex'
-    backstage.io/kubernetes-namespace: myapps
-    backstage.io/kubernetes-label-selector: 'app=nginx'
+    backstage.io/kubernetes-id: 'testflask'
 spec:
   type: service
   lifecycle: experimental

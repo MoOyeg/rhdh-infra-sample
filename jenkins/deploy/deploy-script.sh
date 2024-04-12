@@ -48,7 +48,7 @@ oc process -f $foldername/template.yaml | oc apply -f - -n ${JENKINS_NAMESPACE}
 oc policy add-role-to-user edit system:serviceaccount:$JENKINS_NAMESPACE:jenkins -n $NAMESPACE_DEV 
 oc policy add-role-to-user edit system:serviceaccount:$JENKINS_NAMESPACE:jenkins -n $NAMESPACE_PROD
 oc policy add-role-to-user edit system:serviceaccount:$JENKINS_NAMESPACE:default -n $NAMESPACE_DEV
-oc policy add-role-to-user edit system:serviceaccount:$JENKINS_NAMESPACE:default -n $
+oc policy add-role-to-user edit system:serviceaccount:$JENKINS_NAMESPACE:default -n $NAMESPACE_PROD
 
 oc create secret generic my-secret \
 --from-literal=MYSQL_USER=$MYSQL_USER \
@@ -67,10 +67,10 @@ oc new-app python:3.8~https://github.com/MoOyeg/testFlask.git#release-2.0 \
 --env=MYSQL_DATABASE=$MYSQL_DATABASE -n $NAMESPACE_PROD
 
 oc create configmap testflask-gunicorn-config \
---from-file=./gunicorn/gunicorn.conf.py -n $NAMESPACE_PROD
+--from-file=$foldername/gunicorn.conf.py -n $NAMESPACE_PROD
 
 oc set volume deploy/testflask --add --configmap-name testflask-gunicorn-config \
---mount-path /app/gunicorn --type configmap -n $NAMESPACE_DEV
+--mount-path /app/gunicorn --type configmap -n $NAMESPACE_PROD
 
 oc patch deploy/$APP_NAME --patch "$(cat $foldername/patch-env.json | envsubst)" -n $NAMESPACE_PROD
 
