@@ -71,11 +71,6 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
       oc kustomize ./sso-operator/ | envsubst | oc apply -f -
       ```
 
-  - Create the Red Hat SSO Instance,Realm,Client and User. This will create 3 users admin,user1,user2 all with a password set to the value "test".
-      ```bash
-      oc kustomize ./sso-manifests | envsubst | oc apply -f -
-      ```
-
   - Adding Kubernetes/Topology component integration
     ```bash
     export BACKSTAGE_SA=backstage-sa
@@ -96,12 +91,14 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
     cat ./rhdh-manifests/keycloak/policy-configmap.yaml  | envsubst '${NAMESPACE}' | oc apply -n ${NAMESPACE} -f -
     ```
 
-  - Wait for Keycloak Instance to be Ready(Can copy all)
+  - Create the Red Hat SSO Instance,Realm,Client and User. This will create 3 users admin,user1,user2 all with a password set to the value "test".  Will also wait for Keycloak Instance to be Ready(Can copy all).
     ```bash
     csv=$(oc get subscriptions.operators.coreos.com/rhsso-operator -n ${NAMESPACE} -o jsonpath='{.status.installedCSV}');
 
   
     oc wait --for=jsonpath='{.status.phase}'=Succeeded ClusterServiceVersion/$csv --allow-missing-template-keys=true --timeout=150s -n $NAMESPACE;
+
+    oc kustomize ./sso-manifests | envsubst | oc apply -f -
     
     until [ $(curl -k -s -o /dev/null -I -w "%{http_code}" ${KEYCLOAK_BASE_URL}/auth/realms/${KEYCLOAK_REALM}/.well-known/openid-configuration) -eq "200" ];do echo -e "Waiting for Keycloak instance endpoint to become ready at ${KEYCLOAK_BASE_URL}/auth/realms/${KEYCLOAK_REALM}/.well-known/openid-configuration \n" && sleep 10;done
   
