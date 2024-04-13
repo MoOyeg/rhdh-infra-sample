@@ -83,7 +83,7 @@ agent {
             } catch ( e ) {
               if ( e.toString().contains("NotFound") ) {
                 echo "Deployment mysql does not exist, will create it"
-                def fromJSON = openshift.create( readFile( 'mysql.json' ) )
+                def fromJSON = openshift.create( readFile( './jenkins/deploy/mysql.json' ) )
               } else {
                 throw e
               }

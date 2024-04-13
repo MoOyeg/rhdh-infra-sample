@@ -1,0 +1,87 @@
+{
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": {
+        "creationTimestamp": null,
+        "generation": 1,
+        "name": "mysql"
+    },
+    "spec": {
+        "replicas": 1,
+        "revisionHistoryLimit": 10,
+        "selector": {
+            "matchLabels": {
+                "deployment": "mysql"
+            }
+        },
+        "strategy": {
+            "activeDeadlineSeconds": 21600,
+            "resources": {},
+            "type": "Recreate"
+        },
+        "template": {
+            "metadata": {
+                "creationTimestamp": null,
+                "labels": {
+                    "deployment": "mysql"
+                }
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "env": [
+                            {
+                                "name": "MYSQL_DATABASE",
+                                "value": "testdb"
+                            },
+                            {
+                                "name": "MYSQL_PASSWORD",
+                                "valueFrom": {
+                                    "secretKeyRef": {
+                                        "key": "MYSQL_PASSWORD",
+                                        "name": "my-secret"
+                                    }
+                                }
+                            },
+                            {
+                                "name": "MYSQL_USER",
+                                "valueFrom": {
+                                    "secretKeyRef": {
+                                        "key": "MYSQL_USER",
+                                        "name": "my-secret"
+                                    }
+                                }
+                            }
+                        ],
+                        "image": "image-registry.openshift-image-registry.svc:5000/openshift/mysql:latest",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "mysql",
+                        "ports": [
+                            {
+                                "containerPort": 3306,
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File"
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "terminationGracePeriodSeconds": 30
+            }
+        },
+        "test": false
+    },
+    "status": {
+        "availableReplicas": 0,
+        "latestVersion": 0,
+        "observedGeneration": 0,
+        "replicas": 0,
+        "unavailableReplicas": 0,
+        "updatedReplicas": 0
+    }
+}
