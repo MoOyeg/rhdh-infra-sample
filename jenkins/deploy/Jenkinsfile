@@ -96,7 +96,7 @@ agent {
               echo "Service mysql already exists"
             } else {
               echo "Service mysql does not exist, will create it"
-              def fromJSON2 = openshift.create( readFile( 'mysql-svc.json' ) )
+              def fromJSON2 = openshift.create( readFile( './jenkins/deploy/mysql-svc.json' ) )
             }
 
             echo "Wait until deploy/mysql is available"
