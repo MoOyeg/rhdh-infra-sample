@@ -60,7 +60,7 @@ oc new-app $MYSQL_HOST --env=MYSQL_DATABASE=$MYSQL_DATABASE \
 
 oc set env deploy/$MYSQL_HOST --from=secret/my-secret -n $NAMESPACE_PROD
 
-oc new-app python:3.8~https://github.com/MoOyeg/testFlask.git#release-2.0 \
+oc new-app openshift/python:3.8~https://github.com/MoOyeg/testFlask.git#release-2.0 \
 --name=$APP_NAME -l app=testflask -l backstage.io/kubernetes-id="testflask" \
 --strategy=source --env=APP_CONFIG=./gunicorn/gunicorn.conf.py \
 --env=APP_MODULE=runapp:app --env=MYSQL_HOST=$MYSQL_HOST \
