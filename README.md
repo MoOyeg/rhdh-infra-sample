@@ -116,14 +116,14 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
     ```
 
   - Create our Developer Release via Helm(By Merging files manually)
-      ```bash    
-      yq eval-all '. as $item ireduce ({}; . *+ $item)' ./rhdh-manifests/base/values.yaml ./rhdh-manifests/keycloak/values.yaml  > ./rhdh-manifests/keycloak/values-new.yaml
+    ```bash    
+    yq eval-all '. as $item ireduce ({}; . *+ $item)' ./rhdh-manifests/base/values.yaml ./rhdh-manifests/keycloak/values.yaml  > ./rhdh-manifests/keycloak/values-new.yaml
 
-      helm upgrade -i developer-hub openshift-helm-charts/redhat-developer-hub \
-      --version 1.1.0 \
-      -f ./rhdh-manifests/keycloak/values-new.yaml \
-      -n ${NAMESPACE}
-      ```
+    helm upgrade -i developer-hub openshift-helm-charts/redhat-developer-hub \
+    --version 1.1.0 \
+    -f ./rhdh-manifests/keycloak/values-new.yaml \
+    -n ${NAMESPACE}
+    ```
 
   - It takes a few minutes , but Developer Hub should become available at
     ```bash
