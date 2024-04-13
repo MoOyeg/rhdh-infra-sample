@@ -13,7 +13,7 @@ data:
       rbac:
         admin:
           users:
-            - name: user:default/admin
+            - name: user:default/backstage-admin
         policies-csv-file: ./rbac/rbac-policy.csv
 
     kubernetes:
@@ -22,11 +22,11 @@ data:
       clusterLocatorMethods:
         - type: 'config'
           clusters:
-            - url: ${OCP_API_SERVER} 
-              name: ${CLUSTER_NAME}
+            - url: ${K8S_CLUSTER_URL} 
+              name: ${K8S_CLUSTER_NAME}
               authProvider: 'serviceAccount' 
               skipTLSVerify: true # should be set to 'true' for self-signed certs
-              serviceAccountToken: ${BACKSTAGE_SA_TOKEN} 
+              serviceAccountToken: ${K8S_CLUSTER_TOKEN} 
               customResources: 
                 - group: 'route.openshift.io'
                   apiVersion: 'v1'
