@@ -18,7 +18,7 @@
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.9
 WORKDIR /work/
 COPY ./ ./work
-RUN ls ./work
+RUN ls ./
 RUN ./mvnw package -Dnative -Dmaven.test.skip=true -Dquarkus.native.container-build=true \
     chown 1001 /work \
     && chmod "g+rwX" /work \
