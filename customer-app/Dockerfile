@@ -16,9 +16,8 @@
 ###
 # oc new-app https://github.com/MoOyeg/testFlask.git --name=$APP_NAME -l app=testflask --env=MYSQL_HOST=$MYSQL_HOST --env=MYSQL_DATABASE=$MYSQL_DATABASE -n $NAMESPACE_DEV --strategy=docker
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.9
+COPY ./customer-app ./work
 WORKDIR /work/
-COPY ./ ./work
-RUN ls -a ./work
 RUN ./mvnw package -Dnative -Dmaven.test.skip=true -Dquarkus.native.container-build=true \
     chown 1001 /work \
     && chmod "g+rwX" /work \
