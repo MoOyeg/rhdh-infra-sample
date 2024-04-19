@@ -16,6 +16,8 @@
 ###
 # oc new-app https://github.com/MoOyeg/testFlask.git --name=$APP_NAME -l app=testflask --env=MYSQL_HOST=$MYSQL_HOST --env=MYSQL_DATABASE=$MYSQL_DATABASE -n $NAMESPACE_DEV --strategy=docker
 FROM registry.access.redhat.com/ubi8/openjdk-17:1.19-1
+ENV \
+JAVA_HOME="/usr/lib/jvm/java-17"
 COPY ./customer-app ./work
 WORKDIR /work/
 RUN ./mvnw package -Dnative -Dmaven.test.skip=true -Dquarkus.native.container-build=true \
