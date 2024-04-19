@@ -20,8 +20,9 @@ ENV \
 JAVA_HOME="/usr/lib/jvm/java-17"
 COPY ./customer-app ./work
 WORKDIR /work/
+USER 0
 RUN ./mvnw package -Dnative -Dmaven.test.skip=true -Dquarkus.native.container-build=true \
-    chown 1001 /work \
+RUN chown 1001 /work \
     && chmod "g+rwX" /work \
     && chown 1001:root /work
 COPY --chown=1001:root target/*-runner /work/application
