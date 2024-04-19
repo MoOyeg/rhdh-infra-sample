@@ -41,7 +41,7 @@ data:
     signInPage: oidc
     catalog:
       rules:
-        - allow: [Component, API, Location, Template, User]
+        - allow: [Component, API, Location, Template, System, Resource, Group, User]
       providers:
         keycloakOrg:
           production:

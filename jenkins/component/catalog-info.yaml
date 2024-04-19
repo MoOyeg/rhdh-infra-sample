@@ -5,6 +5,6 @@ metadata:
   description: A collection of all the catalog entities for the testFlask Application
 spec:
   targets:
-    - https://raw.githubusercontent.com/MoOyeg/rhdh-infra-sample/working/jenkins/component/system.yaml
-    - https://raw.githubusercontent.com/MoOyeg/rhdh-infra-sample/working/jenkins/component/testflask-db.yaml
-    - https://raw.githubusercontent.com/MoOyeg/rhdh-infra-sample/working/jenkins/component/component.yaml
+    - ./system.yaml
+    - ./testflask-db.yaml
+    - ./component.yaml
