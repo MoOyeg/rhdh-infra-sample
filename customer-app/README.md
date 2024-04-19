@@ -68,3 +68,8 @@ Create your first JPA entity
 Easily start your REST Web Services
 
 [Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+
+
+
+oc new-app https://github.com/MoOyeg/rhdh-infra-sample.git#working --name=customer-app \
+--context-dir=./customer-app -n build-test --strategy=docker
