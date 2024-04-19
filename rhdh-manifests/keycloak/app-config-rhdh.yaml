@@ -40,6 +40,11 @@ data:
     
     signInPage: oidc
     catalog:
+      locations:
+        - type: url
+          target: https://github.com/MoOyeg/rhdh-infra-sample/blob/working/jenkins/component/location.yaml
+      rules:
+        - allow: [Component, API, Location, Template, User]
       providers:
         keycloakOrg:
           production:

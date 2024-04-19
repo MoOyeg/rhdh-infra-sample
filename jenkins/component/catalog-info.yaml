@@ -1,12 +1,10 @@
 apiVersion: backstage.io/v1alpha1
-kind: Component
+kind: Location
 metadata:
-  name: 'jenkins-test2'
-  description: 'jenkins-descripition-test'
-  annotations:
-    jenkins.io/job-full-name: '1234-jenkins/1234-jenkins-testflask-pipeline'
-    backstage.io/kubernetes-id: 'testflask'
+  name: testFlask-location
+  description: A collection of all the catalog entities for the testFlask Application
 spec:
-  type: service
-  lifecycle: experimental
-  owner: user:default/backstage-admin
+  targets:
+    - ./system.yaml
+    - ./testflask-db.yaml
+    - ./component.yaml

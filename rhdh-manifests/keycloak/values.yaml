@@ -12,6 +12,10 @@ global:
       - disabled: false
         package: >-
           ./dynamic-plugins/dist/janus-idp-backstage-plugin-keycloak-backend-dynamic
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-techdocs
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-techdocs-backend-dynamic
 upstream:
   backstage:
     extraAppConfig:

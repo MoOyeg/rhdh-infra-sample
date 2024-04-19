@@ -1,0 +1,7 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: testflask-system
+  title: TestFlask System
+spec:
+  owner: user:default/backstage-user1
