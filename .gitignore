@@ -9,3 +9,6 @@ dynamic-plugins-configmap.yaml
 rhdh-manifests/base/values-new.yaml
 rhdh-manifests/keycloak/values-new.yaml
 jenkins/values-new.yaml
+
+
+
