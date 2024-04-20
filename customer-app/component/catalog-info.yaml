@@ -8,3 +8,4 @@ spec:
     - ./system.yaml
     - ./customer-db.yaml
     - ./component.yaml
+    - ./customer-api.yaml
