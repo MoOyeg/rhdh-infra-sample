@@ -15,4 +15,4 @@ spec:
   type: database
   lifecycle: experimental
   owner: user:default/backstage-admin
-  system: testflask-system
+  system: customer-app-system
