@@ -1,0 +1,19 @@
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: customer-api
+  title: Customer App Backend API
+  description: |
+    This is a the Customer App API based on the OpenAPI 3.0 specification. 
+  links:
+    - title: Customer App
+      url: https://petstore3.swagger.io/
+    - title: Petstore API
+      url: https://petstore3.swagger.io/api/v3/openapi.json
+spec:
+  type: openapi
+  system: customer-app-system
+  owner: user:default/backstage-user1
+  lifecycle: experimental
+  definition:
+    $openapi: "./openapi.yaml"

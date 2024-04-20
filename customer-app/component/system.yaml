@@ -1,0 +1,7 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: customer-app-system
+  title: Customer App System
+spec:
+  owner: user:default/backstage-user1
