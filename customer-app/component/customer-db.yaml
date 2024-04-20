@@ -1,9 +1,9 @@
 apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
-  name: testflask-db
-  title: PostgreSQL Database for testflask
-  description: PostgreSQL is a powerful, open source object-relational database system.
+  name: customer-db
+  title: PostgreSQL Database for Customer App
+  description: MySQL is a powerful, open source object-relational database system.
   links:
     - url: https://www.postgresql.org
       title: PostgreSQL website
