@@ -73,3 +73,6 @@ Easily start your REST Web Services
 
 oc new-app https://github.com/MoOyeg/rhdh-infra-sample.git#working --name=customer-app \
 --context-dir=./customer-app -n build-test --strategy=docker
+
+oc create secret generic my-secret --from-literal=MYSQL_USER=$MYSQL_USER --from-literal=MYSQL_PASSWORD=$MYSQL_PASSWORD
+oc new-app $MYSQL_HOST --env=MYSQL_DATABASE=$MYSQL_DATABASE -l db=mysql -l app=build
