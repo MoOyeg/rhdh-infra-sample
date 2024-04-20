@@ -12,5 +12,10 @@ spec:
   lifecycle: experimental
   owner: user:default/backstage-user1
   system: customer-app-system
+  providesApis:
+    - name: customer-api
+      lifecycle: experimental
+      definition:
+        $ref: './customer-api.yaml'
   dependsOn:
     - resource:customer-app-db

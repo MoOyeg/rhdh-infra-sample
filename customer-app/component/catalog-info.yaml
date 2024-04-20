@@ -7,5 +7,4 @@ spec:
   targets:
     - ./system.yaml
     - ./customer-db.yaml
-    - ./customer-api.yaml
     - ./component.yaml
