@@ -18,8 +18,14 @@ global:
       - disabled: false
         package: ./dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic
       - disabled: false
+        package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-topology
+      - disabled: false
         package: >-
           ./dynamic-plugins/dist/janus-idp-backstage-plugin-keycloak-backend-dynamic
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-techdocs
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-techdocs-backend-dynamic
       - disabled: false
         package: ./dynamic-plugins/dist/backstage-plugin-jenkins
       - disabled: false
@@ -56,10 +62,11 @@ upstream:
     image:
       registry: registry.redhat.io
       repository: rhdh/rhdh-hub-rhel9
-      tag: 1.1-97
+      tag: 1.1-102
       # Tag is set via prepare.sh script
       # tag: "${RHDH_VERSION}"
       pullSecrets:
+        - rhdh-pull-secret
         - rhdh-pull-secret
     command: []
     # FIXME (tumido): USE POSTGRES_PASSWORD and POSTGRES_USER instead of POSTGRES_ADMIN_PASSWORD

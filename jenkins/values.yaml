@@ -9,5 +9,6 @@ global:
 upstream:
   backstage:
     extraEnvVarsSecrets:
-      - jenkins-backstage-secret
+      - jenkins-backstage-secret 
+
 
