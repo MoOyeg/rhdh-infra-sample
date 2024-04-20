@@ -1,7 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
-  name: customer-db
+  name: customer-app-db
   title: PostgreSQL Database for Customer App
   description: MySQL is a powerful, open source object-relational database system.
   links:
