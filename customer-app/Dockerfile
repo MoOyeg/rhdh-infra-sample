@@ -16,17 +16,13 @@
 ###
 # oc new-app https://github.com/MoOyeg/testFlask.git --name=$APP_NAME -l app=testflask --env=MYSQL_HOST=$MYSQL_HOST --env=MYSQL_DATABASE=$MYSQL_DATABASE -n $NAMESPACE_DEV --strategy=docker
 FROM registry.access.redhat.com/ubi8/openjdk-17:1.19-1
-ENV \
-JAVA_HOME="/usr/lib/jvm/java-17"
 COPY ./customer-app ./work
 WORKDIR /work/
 USER 0
-RUN chown 1001 /work \
+RUN mvn package -Dnative -Dmaven.test.skip=true -Dquarkus.native.container-build=true \
+    && chown 1001 /work \
     && chmod "g+rwX" /work \
-    && chown 1001:root /work \
-    && ./mvnw package -Dnative -Dmaven.test.skip=true -Dquarkus.native.container-build=true
-
-
+    && chown 1001:root /work 
 COPY --chown=1001:root target/*-runner /work/application
 
 EXPOSE 8080
