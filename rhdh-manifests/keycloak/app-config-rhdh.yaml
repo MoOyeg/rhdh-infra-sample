@@ -7,7 +7,14 @@ data:
   app-config-rhdh.yaml: |
     app:
       title: Red Hat Developer Hub - Test
-    
+
+    techdocs: 
+      generator:
+        runIn: local
+      builder: local
+      publisher:
+        type: local
+            
     permission:
       enabled: true
       rbac:

@@ -160,6 +160,8 @@ paths:
       responses:
         "200":
           description: OK
+        "422":
+          description: "Id was invalidly set on request"
 components:
   schemas:
     Customer:

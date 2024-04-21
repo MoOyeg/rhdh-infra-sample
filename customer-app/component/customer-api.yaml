@@ -7,9 +7,7 @@ metadata:
     This is a the Customer App API based on the OpenAPI 3.0 specification. 
   links:
     - title: Customer App
-      url: https://petstore3.swagger.io/
-    - title: Petstore API
-      url: https://petstore3.swagger.io/api/v3/openapi.json
+      url: http://customer-app-customer-app.apps.cluster2.sandbox1482.opentlc.com
 spec:
   type: openapi
   system: customer-app-system
