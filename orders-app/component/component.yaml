@@ -14,5 +14,7 @@ spec:
   system: order-app-system
   providesApis:
     - order-api
+  consumesApis:
+    - customer-api
   dependsOn:
     - resource:order-app-db
