@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata: 
+  name: order-app-location
+  description: A collection of all the catalog entities for the testFlask Application
+spec:
+  targets:
+    - ./system.yaml
+    - ./order-db.yaml
+    - ./component.yaml
+    - ./order-api.yaml

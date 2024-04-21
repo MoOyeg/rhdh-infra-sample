@@ -1,0 +1,7 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: order-app-system
+  title: Order App System
+spec:
+  owner: user:default/backstage-user1

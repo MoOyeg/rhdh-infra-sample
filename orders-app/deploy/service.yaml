@@ -1,0 +1,30 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: order-app
+  namespace: order-app
+  labels:
+    app: order-app
+    app.kubernetes.io/component: order-app
+    app.kubernetes.io/instance: order-app
+    backstage.io/kubernetes-id: order-app
+  annotations:
+    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"mysql"}]'
+    openshift.io/generated-by: OpenShiftNewApp
+spec:
+  ipFamilies:
+    - IPv4
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  internalTrafficPolicy: Cluster
+  type: ClusterIP
+  ipFamilyPolicy: SingleStack
+  sessionAffinity: None
+  selector:
+    backstage.io/kubernetes-id: order-app
+    deployment: order-app
+status:
+  loadBalancer: {}

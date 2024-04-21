@@ -1,0 +1,63 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  annotations:
+    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"mysql"}]'
+    image.openshift.io/triggers: >-
+      [{"from":{"kind":"ImageStreamTag","name":"order-app:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"order-app\")].image"}]
+  name: order-app
+  namespace: order-app
+  labels:
+    app: order-app
+    app.kubernetes.io/component: order-app
+    app.kubernetes.io/instance: order-app
+    app.kubernetes.io/part-of: order-app
+    backstage.io/kubernetes-id: order-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      backstage.io/kubernetes-id: order-app
+      deployment: order-app
+  template:
+    metadata:
+      labels:
+        backstage.io/kubernetes-id: order-app
+        deployment: order-app
+    spec:
+      containers:
+        - resources: {}
+          env:
+            - name: QUARKUS_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_PASSWORD
+            - name: QUARKUS_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_USER
+            - name: QUARKUS_DATASOURCE_DB_KIND
+              value: mysql
+            - name: QUARKUS_DATASOURCE_JDBC_URL
+              value: 'jdbc:mysql://mysql:3306/testdb'
+          terminationMessagePath: /dev/termination-log
+          name: order-app
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: Always
+          terminationMessagePolicy: File
+          image: image-registry.openshift-image-registry.svc:5000/order-app/order-app:latest
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

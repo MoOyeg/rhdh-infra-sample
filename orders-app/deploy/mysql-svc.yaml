@@ -1,0 +1,27 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mysql
+  namespace: order-app
+  labels:
+    app: mysql
+    app.kubernetes.io/component: mysql
+    app.kubernetes.io/instance: mysql
+    backstage.io/kubernetes-id: order-app
+spec:
+  ipFamilies:
+    - IPv4
+  ports:
+    - name: 3306-tcp
+      protocol: TCP
+      port: 3306
+      targetPort: 3306
+  internalTrafficPolicy: Cluster
+  type: ClusterIP
+  ipFamilyPolicy: SingleStack
+  sessionAffinity: None
+  selector:
+    backstage.io/kubernetes-id: order-app
+    deployment: mysql
+status:
+  loadBalancer: {}

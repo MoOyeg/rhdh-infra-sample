@@ -1,8 +1,8 @@
 apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
-  name: customer-app-db
-  title: MySQL Database for Customer App
+  name: order-app-db
+  title: MySQL Database for Order App
   description: MySQL is a powerful, open source object-relational database system.
   links:
     - url: https://www.mysql.com/
@@ -12,4 +12,4 @@ spec:
   type: database
   lifecycle: experimental
   owner: user:default/backstage-admin
-  system: customer-app-system
+  system: order-app-system

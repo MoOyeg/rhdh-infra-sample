@@ -1,0 +1,8 @@
+site_name: Order App Documentation
+site_description: Documentation for the Order App
+
+nav:
+  - Home: index.md
+
+plugins:
+  - techdocs-core

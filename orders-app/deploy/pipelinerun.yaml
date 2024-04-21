@@ -1,0 +1,28 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: orderapp-pipelinerun
+  generateName: orderapp-pipelinerun-
+  labels:
+    tekton.dev/pipeline: orderapp-pipelinerun
+spec:
+  #Creating PipelineRun as Pending
+  status: "PipelineRunPending"
+  params:
+    - name: GIT_URL
+      value: https://github.com/MoOyeg/rhdh-infra-sample.git
+    - name: GIT_BRANCH
+      value: working
+  pipelineRef:
+    name: order-app-pipeline
+  serviceAccountName: pipeline
+  timeout: 1h0m0s
+  workspaces:
+    - name: pipeline-pvc
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi

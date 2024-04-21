@@ -1,0 +1,18 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: 'order-app'
+  description: 'Order Demo application with exposed API'
+  annotations:
+    jenkins.io/job-full-name: '1234-jenkins/1234-jenkins-testflask-pipeline'
+    backstage.io/kubernetes-id: 'order-app'
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: service
+  lifecycle: experimental
+  owner: user:default/backstage-user1
+  system: order-app-system
+  providesApis:
+    - order-api
+  dependsOn:
+    - resource:order-app-db

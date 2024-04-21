@@ -1,0 +1,7 @@
+resources:
+- ./secret.yaml
+- ./deployment.yaml
+- ./mysql.yaml
+- ./mysql-svc.yaml
+- ./service.yaml
+- ./route.yaml
