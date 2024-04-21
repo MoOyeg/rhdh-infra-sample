@@ -9,7 +9,7 @@ metadata:
 spec:
   type: service
   lifecycle: experimental
-  owner: user:default/backstage-user1
+  owner: user:default/backstage-admin
   system: testflask-system
   dependsOn:
     - resource:testflask-db

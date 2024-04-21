@@ -4,4 +4,4 @@ metadata:
   name: testflask-system
   title: TestFlask System
 spec:
-  owner: user:default/backstage-user1
+  owner: user:default/backstage-admin
