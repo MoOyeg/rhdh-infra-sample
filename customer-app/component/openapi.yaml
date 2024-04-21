@@ -1,5 +1,7 @@
 ---
 openapi: 3.0.3
+servers:
+  - url: http://customer-app-customer-app.apps.cluster2.sandbox1482.opentlc.com
 info:
   title: customer-app API
   version: 1.0.0-SNAPSHOT

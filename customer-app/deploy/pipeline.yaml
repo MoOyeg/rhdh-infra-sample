@@ -1,0 +1,48 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: customer-app-pipeline
+  namespace: build-test
+spec:
+  params:
+    - name: GIT_URL
+      type: string
+    - name: GIT_BRANCH
+      type: string
+  tasks:
+    - name: git-clone-code
+      params:
+        - name: url
+          value: "$(params.GIT_URL)"
+        - name: revision
+          value: "$(params.GIT_BRANCH)"
+        - name: submodules
+          value: "true"
+        - name: depth
+          value: "10"
+        - name: sslVerify
+          value: "true"
+        - name: subdirectory
+          value: src
+        - name: deleteExisting
+          value: "true"
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: pipeline-pvc
+    - name: git-info
+      params:
+        - name: SOURCE_PATH
+          value: src
+      runAfter:
+        - git-clone-code
+      taskRef:
+        kind: Task
+        name: git-info
+      workspaces:
+        - name: source
+          workspace: pipeline-pvc
+  workspaces:
+    - name: pipeline-pvc

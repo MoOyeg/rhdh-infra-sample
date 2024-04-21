@@ -3,9 +3,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: rhdh-topology-plugin
 rules:
-  # Base for Kubernetes plugin
-  - apiGroups:
-      - ''
+  - verbs:
+      - get
+      - watch
+      - list
+    apiGroups:
+      - '*'
     resources:
       - pods/log
       - pods
@@ -13,8 +16,15 @@ rules:
       - configmaps
       - resourcequotas
       - limitranges
-    verbs:
-      - get
-      - watch
-      - list
+      - deployments
+      - taskruns
+      - pipelineruns
+      - cronjobs
+      - jobs
+      - replicasets
+      - daemonsets
+      - routes
+      - statefulsets
+      - ingresses
+      - horizontalpodautoscalers
 

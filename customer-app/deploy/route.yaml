@@ -1,0 +1,20 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: customer-app
+  namespace: customer-app
+  labels:
+    app: customer-app
+    app.kubernetes.io/component: customer-app
+    app.kubernetes.io/instance: customer-app
+    backstage.io/kubernetes-id: customer-app
+  annotations:
+    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"mysql"}]'
+spec:
+  to:
+    kind: Service
+    name: customer-app
+    weight: 100
+  port:
+    targetPort: 8080
+  wildcardPolicy: None

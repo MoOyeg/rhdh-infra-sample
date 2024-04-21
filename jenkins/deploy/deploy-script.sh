@@ -75,6 +75,9 @@ oc set volume deploy/testflask --add --configmap-name testflask-gunicorn-config 
 oc patch deploy/$APP_NAME --patch "$(cat $foldername/patch-env.json | envsubst)" -n $NAMESPACE_PROD
 
 oc expose svc/$APP_NAME --port 8080 -n $NAMESPACE_PROD
+oc label deploy/${APP_NAME} app.kubernetes.io/part-of=${APP_NAME} -n $NAMESPACE_PROD
+oc label deploy/mysql app.kubernetes.io/part-of=${APP_NAME}
+oc annotate deploy/${APP_NAME} app.openshift.io/connects-to=mysql" -n $NAMESPACE_PROD
 
 export JENKINS_BASE_IMAGE=registry.redhat.io/openshift4/ose-jenkins-agent-base:v4.10.0
 export PYTHON_DOCKERFILE=$(cat $foldername/Dockerfile | envsubst )

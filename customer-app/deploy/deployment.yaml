@@ -1,0 +1,63 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  annotations:
+    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"mysql"}]'
+    image.openshift.io/triggers: >-
+      [{"from":{"kind":"ImageStreamTag","name":"customer-app:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"customer-app\")].image"}]
+  name: customer-app
+  namespace: customer-app
+  labels:
+    app: customer-app
+    app.kubernetes.io/component: customer-app
+    app.kubernetes.io/instance: customer-app
+    app.kubernetes.io/part-of: customer-app
+    backstage.io/kubernetes-id: customer-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      backstage.io/kubernetes-id: customer-app
+      deployment: customer-app
+  template:
+    metadata:
+      labels:
+        backstage.io/kubernetes-id: customer-app
+        deployment: customer-app
+    spec:
+      containers:
+        - resources: {}
+          env:
+            - name: QUARKUS_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_PASSWORD
+            - name: QUARKUS_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_USER
+            - name: QUARKUS_DATASOURCE_DB_KIND
+              value: mysql
+            - name: QUARKUS_DATASOURCE_JDBC_URL
+              value: 'jdbc:mysql://mysql:3306/testdb'
+          terminationMessagePath: /dev/termination-log
+          name: customer-app
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: Always
+          terminationMessagePolicy: File
+          image: image-registry.openshift-image-registry.svc:5000/customer-app/customer-app:latest
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
