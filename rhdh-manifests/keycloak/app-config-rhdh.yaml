@@ -8,6 +8,11 @@ data:
     app:
       title: Red Hat Developer Hub - Test
 
+    backend:
+      reading:
+        allow:
+          - host: "*.$BASEDOMAIN"
+
     techdocs: 
       generator:
         runIn: local

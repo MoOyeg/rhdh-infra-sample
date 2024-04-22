@@ -84,7 +84,7 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
 
   - Create our Application Specific Configuration
     ```bash
-    cat ./rhdh-manifests/keycloak/app-config-rhdh.yaml  | envsubst '${NAMESPACE}' | oc apply -n ${NAMESPACE} -f - 
+    cat ./rhdh-manifests/keycloak/app-config-rhdh.yaml  | envsubst '${NAMESPACE} ${BASEDOMAIN}' | oc apply -n ${NAMESPACE} -f - 
     ```
 
     ```bash
@@ -114,7 +114,7 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
 
   - Create our Developer Release via Helm(By Merging files manually)
     ```bash    
-    yq eval-all '. as $item ireduce ({}; . *+ $item)' ./rhdh-manifests/base/values.yaml ./rhdh-manifests/keycloak/values.yaml  > ./rhdh-manifests/keycloak/values-new.yaml
+    yq eval-all '. as $item ireduce ({}; . *+ $item)' ./rhdh-manifests/base/values.yaml ./rhdh-manifests/keycloak/values.yaml > ./rhdh-manifests/keycloak/values-new.yaml
 
     helm upgrade -i developer-hub openshift-helm-charts/redhat-developer-hub \
     --version 1.1.0 \
@@ -241,7 +241,7 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
 
   - Merge Keycloak Values files with jenkins.
     ```bash
-    yq eval-all '. as $item ireduce ({}; . *+ $item)' ./rhdh-manifests/base/values.yaml ./rhdh-manifests/keycloak/values.yaml  > ./rhdh-manifests/keycloak/values-new.yaml
+    yq eval-all '. as $item ireduce ({}; . *+ $item)' ./rhdh-manifests/base/values.yaml ./rhdh-manifests/keycloak/values.yaml > ./rhdh-manifests/keycloak/values-new.yaml
 
     yq eval-all '. as $item ireduce ({}; . *+ $item)' ./rhdh-manifests/keycloak/values-new.yaml ./jenkins/values.yaml  > ./jenkins/values-new.yaml    
 
