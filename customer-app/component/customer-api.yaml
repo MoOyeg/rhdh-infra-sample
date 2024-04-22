@@ -14,4 +14,4 @@ spec:
   owner: user:default/backstage-user1
   lifecycle: experimental
   definition:
-    $openapi: "./openapi.yaml"
+    $openapi: "./openapi"

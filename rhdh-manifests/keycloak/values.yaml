@@ -18,6 +18,14 @@ global:
         package: ./dynamic-plugins/dist/backstage-plugin-techdocs-backend-dynamic
 upstream:
   backstage:
+    appConfig:
+      backend:
+        cors:
+          origin: 'https://{{- include "janus-idp.hostname" . }}'
+          Access-Control-Allow-Origin: '*'
+        csp:
+          connect-src: ["'self'", 'http:', 'https:']
+      
     extraAppConfig:
       - configMapRef: app-config-rhdh
         filename: app-config-rhdh.yaml
