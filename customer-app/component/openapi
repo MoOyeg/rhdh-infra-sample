@@ -1,7 +1,7 @@
 ---
 openapi: 3.0.3
 servers:
-  - url: "customer-app.customer-app.svc.cluster.local"
+  - url: "http://customer-app.customer-app.svc.cluster.local"
   - url: '{protocol}://customer-app-customer-app.apps.cluster2.sandbox1482.opentlc.com'
     variables:
       protocol:
