@@ -43,7 +43,7 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
       
       Set a secret for SSO Client
       ```bash
-      export BACKSTAGE_CLIENT_SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+      export BACKSTAGE_CLIENT_SECRET=$(cat /dev/urandom | base64 | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
       ```
 
       Set an Auth Session Secret
