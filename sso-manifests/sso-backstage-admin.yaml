@@ -2,7 +2,7 @@ apiVersion: keycloak.org/v1alpha1
 kind: KeycloakUser
 metadata:
   name: backstage-admin-user
-  namespace: ${NAMESPACE}
+  namespace: ${SSO_NAMESPACE}
 spec:
   user:
     username: "backstage-admin"

@@ -1,0 +1,4 @@
+resources:
+  - dynamic-plugins-configmap.yaml
+  - policy-configmap.yaml
+  - app-config-configmap.yaml

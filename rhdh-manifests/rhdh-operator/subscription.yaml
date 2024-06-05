@@ -1,11 +1,11 @@
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  name: rhsso-operator
-  namespace: ${SSO_NAMESPACE}
+  name: rhdh
+  namespace: ${RHDH_OPERATOR_NAMESPACE}
 spec:
-  channel: stable
+  channel: fast
   installPlanApproval: Automatic
-  name: rhsso-operator
+  name: rhdh
   source: redhat-operators
   sourceNamespace: openshift-marketplace

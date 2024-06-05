@@ -1,0 +1,4 @@
+resources:
+ - subscription.yaml
+ - operatorgroup.yaml
+ - backstage.yaml

@@ -19,5 +19,5 @@ spec:
         clientSecret:
           name: backstage-sso-secret
         extraScopes: []
-        issuer: "https://keycloak-${NAMESPACE}.${BASEDOMAIN}/auth/realms/${KEYCLOAK_REALM}"
+        issuer: "https://keycloak-${SSO_NAMESPACE}.${BASEDOMAIN}/auth/realms/${KEYCLOAK_REALM}"
       type: OpenID

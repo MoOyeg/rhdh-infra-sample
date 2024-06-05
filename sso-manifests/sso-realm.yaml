@@ -2,7 +2,7 @@ apiVersion: keycloak.org/v1alpha1
 kind: KeycloakRealm
 metadata:
   name: backstage-sso
-  namespace: ${NAMESPACE}
+  namespace: ${SSO_NAMESPACE}
   labels:
     app: sso-backstage-sample
 spec:

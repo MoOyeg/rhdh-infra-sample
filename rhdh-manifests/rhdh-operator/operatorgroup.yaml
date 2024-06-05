@@ -1,0 +1,7 @@
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: rhdh-operatorgroup
+  namespace: ${RHDH_OPERATOR_NAMESPACE}
+spec:
+  upgradeStrategy: Default

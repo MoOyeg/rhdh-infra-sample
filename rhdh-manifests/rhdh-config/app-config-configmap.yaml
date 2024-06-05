@@ -9,6 +9,10 @@ data:
       title: Red Hat Developer Hub - Test
 
     backend:
+      auth:
+        keys:
+          - secret: ${AUTH_SESSION_SECRET}
+
       reading:
         allow:
           - host: "*.$BASEDOMAIN"
@@ -26,7 +30,7 @@ data:
         admin:
           users:
             - name: user:default/backstage-admin
-        policies-csv-file: ./rbac/rbac-policy.csv
+        policies-csv-file: /opt/app-root/src/rbac-policy.csv
 
     kubernetes:
       serviceLocatorMethod:

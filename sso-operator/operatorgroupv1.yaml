@@ -2,7 +2,7 @@ apiVersion: operators.coreos.com/v1alpha2
 kind: OperatorGroup
 metadata:
   name: sso-operator-group
-  namespace: ${NAMESPACE}
+  namespace: ${SSO_NAMESPACE}
 spec:
   targetNamespaces:
-    - ${NAMESPACE}
+    - ${SSO_NAMESPACE}
