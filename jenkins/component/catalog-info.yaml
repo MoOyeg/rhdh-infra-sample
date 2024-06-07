@@ -1,10 +1,9 @@
 apiVersion: backstage.io/v1alpha1
 kind: Location
 metadata:
-  name: testFlask-location
-  description: A collection of all the catalog entities for the testFlask Application
+  name: Jenkins-Test-location
+  description: A collection of all the catalog entities for the Jenkins Test Application
 spec:
   targets:
     - ./system.yaml
-    - ./testflask-db.yaml
     - ./component.yaml

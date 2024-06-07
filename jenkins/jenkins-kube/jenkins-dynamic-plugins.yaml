@@ -1,0 +1,6 @@
+plugins:
+- package: './dynamic-plugins/dist/backstage-plugin-jenkins'
+  disabled: false
+  pluginConfig: {}
+- disabled: false
+  package: ./dynamic-plugins/dist/backstage-plugin-jenkins-backend-dynamic

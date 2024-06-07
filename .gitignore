@@ -12,3 +12,4 @@ jenkins/values-new.yaml
 
 
 
+jenkins/jenkins-kube/jenkins-dynamic-plugins-updated.yaml

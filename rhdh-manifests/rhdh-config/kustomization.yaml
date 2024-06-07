@@ -1,4 +1,11 @@
 resources:
-  - dynamic-plugins-configmap.yaml
+  # - dynamic-plugins-configmap.yaml
   - policy-configmap.yaml
   - app-config-configmap.yaml
+configMapGenerator:
+- name: dynamic-plugins-rhdh
+  files:
+  - dynamic-plugins.yaml
+generatorOptions:
+ disableNameSuffixHash: true
+namespace: ${NAMESPACE}

@@ -1,0 +1,10 @@
+resources:
+- jenkins-backstage-secret.yaml
+configMapGenerator:
+- name: dynamic-plugins-rhdh
+  files:
+  - ./dynamic-plugins.yaml
+generatorOptions:
+ disableNameSuffixHash: true
+namespace: ${NAMESPACE}
+

@@ -18,10 +18,6 @@ The below sample will:
   - PersistentVolume provisioner support in the underlying infrastructure is available.
   - Tested with version 1.1.0 of  openshift-helm-charts/redhat-developer-hub
   - [yq](https://github.com/mikefarah/yq/releases) > 4
-  - Dependecies of the RHDH Helm Chart can change. Please review below for other dependencies.
-     ```bash
-    helm show readme --version 1.1.0 openshift-helm-charts/redhat-developer-hub
-    ```
 
 
 ### Installation
@@ -78,7 +74,7 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
       oc kustomize ./sso-operator/ | envsubst | oc apply -f -
       ```
 
-  - Create the Red Hat SSO Instance,Realm,Client and User. This will create 3 users admin,user1,user2 all with a password set to the value "test".  Will also wait for Keycloak Instance to be Ready(Can copy all).
+  - Create the Red Hat SSO Instance,Realm,Client and User. This will create 3 users backstage-admin,backstage-user1,backstage-user2 all with a password set to the value "test".  Will also wait for Keycloak Instance to be Ready(Can copy all).
     ```bash
     
     csv=$(oc get subscriptions.operators.coreos.com/rhsso-operator -n ${SSO_NAMESPACE} -o jsonpath='{.status.installedCSV}');
@@ -203,13 +199,7 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
 
   - Let's start the deploy for a Jenkins Example
 
-  - Set your jenkins namespace.An example Jenkins Installation and pipeline are provided. The below command should spin up a Jenkins Instance in namespace 1234-Jenkins, build an agent image and run the pipeline build
-
-    <!-- ```bash
-    ./jenkins/deploy/deploy-script.sh
-    ``` -->
-
-  - set namespace for Jenkins(From our example above it's 1234-jenkins)
+  - set namespace for Jenkins
     ```bash
     export JENKINS_NAMESPACE=jenkins-test
     oc new-project $JENKINS_NAMESPACE
@@ -241,8 +231,18 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
     ```bash
     export JENKINS_API_TOKEN=$(curl -k -X POST -H "Authorization: Bearer ${USER_TOKEN}" "https://${JENKINS_ROUTE}/user/${JENKINS_USERNAME}/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken" --data 'newTokenName=backstage-token' | jq '.data.tokenValue' | tr -d '"')
     ```
- 
-  - Create a sampleJenkinsFile Pipeline
+
+  - Merge Dynamic Configuration Files
+    ```bash
+    yq eval-all '. as $item ireduce ({}; . *+ $item)' ./jenkins/jenkins-kube/jenkins-dynamic-plugins.yaml ./rhdh-manifests/rhdh-config/dynamic-plugins.yaml > ./jenkins/jenkins-kube/dynamic-plugins.yaml
+    ```
+
+  - We need to create our jenkins secret for backstage to use
+    ```bash
+    oc delete configmap/dynamic-plugins-rhdh -n ${NAMESPACE}; oc kustomize ./jenkins/jenkins-kube | envsubst | oc apply -f - && sleep 5 && oc patch backstage backstage-test -n ${NAMESPACE} --type "json" -p '[{"op":"add","path":"/spec/application/extraEnvs/secrets/0","value":{"name":"jenkins-backstage-secret"}}]'
+    ```
+
+  - Create a Sample JenkinsFile Pipeline
     ```bash
       echo """
       apiVersion: build.openshift.io/v1
@@ -265,30 +265,6 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
       """ | oc create -f -
     ```
 
-  - We need to create our jenkins secret for backstage to use
-    ```bash
-    cat ./jenkins/jenkins-backstage-secret.yaml | envsubst | oc apply -f -
-    ```
-
-  - Update Helm Information
-    ```bash
-    helm repo update openshift-helm-charts
-
-    helm show values openshift-helm-charts/redhat-developer-hub --version 1.1.0 > ./rhdh-manifests/base/values.yaml
-    ```
-
-  - Merge Keycloak Values files with jenkins.
-    ```bash
-    yq eval-all '. as $item ireduce ({}; . *+ $item)' ./rhdh-manifests/base/values.yaml ./rhdh-manifests/keycloak/values.yaml > ./rhdh-manifests/keycloak/values-new.yaml
-
-    yq eval-all '. as $item ireduce ({}; . *+ $item)' ./rhdh-manifests/keycloak/values-new.yaml ./jenkins/values.yaml  > ./jenkins/values-new.yaml    
-
-    helm upgrade -i developer-hub openshift-helm-charts/redhat-developer-hub \
-    --version 1.1.0 \
-    -f ./jenkins/values-new.yaml \
-    -n ${NAMESPACE}
-    ```
-  
   - We should now be able to register our Jenkins component and display it
   ![Create Jenkins Component](./images/rhdh-create-jenkins-component.png)
 
