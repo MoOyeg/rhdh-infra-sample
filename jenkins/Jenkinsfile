@@ -1,5 +1,20 @@
 pipeline {
-    agent { docker { image 'maven:3.9.7-eclipse-temurin-17-alpine' } }
+
+    agent {
+      kubernetes {
+        cloud "openshift"
+        containerTemplate {
+          name "jnlp"
+          image "maven:3.9.7-eclipse-temurin-17-alpine"  
+          resourceRequestMemory "500Mi"
+          resourceLimitMemory "500Mi"
+          resourceRequestCpu "300m"
+          resourceLimitCpu "300m"
+          alwaysPullImage "True"
+        }
+      }
+    }
+
     stages {
         stage('build') {
             steps {
