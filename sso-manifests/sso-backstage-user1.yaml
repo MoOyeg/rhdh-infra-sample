@@ -6,7 +6,7 @@ metadata:
 spec:
   user:
     username: "backstage-user1"
-    email: "user1@test.com"
+    email: "backstage-user1@test.com"
     enabled: True
     emailVerified: True
     credentials:
@@ -20,3 +20,4 @@ spec:
   realmSelector:
     matchLabels:
       app: sso-backstage-sample
+#Username must be set to email due to bug https://issues.redhat.com/browse/RHIDP-2272

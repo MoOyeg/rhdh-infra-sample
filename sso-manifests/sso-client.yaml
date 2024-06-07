@@ -55,8 +55,8 @@ spec:
       - "address"
       - "phone"
       - "offline_access"
-    redirectUris: 
-      - https://developer-hub-${NAMESPACE}.${BASEDOMAIN}/api/auth/oidc/handler/frame
+    redirectUris:
+      - https://${BACKSTAGE_CR_NAME}-developer-hub-${NAMESPACE}.${BASEDOMAIN}/api/auth/oidc/handler/frame
     protocolMappers:
     - name: backstage-uid
       protocol: openid-connect
@@ -73,3 +73,6 @@ spec:
   realmSelector:
     matchLabels:
       app: sso-backstage-sample
+
+
+

@@ -63,7 +63,12 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
       export KEYCLOAK_REALM=backstage
       ```
 
-  - Create deploy namespace
+      Set Backstage CR Name  
+      ```
+      export BACKSTAGE_CR_NAME=backstage-test
+      ```
+
+  - Create our namespaces
       ```bash
       oc kustomize ./namespace | envsubst | oc apply -f -
       ```
@@ -73,19 +78,16 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
       oc kustomize ./sso-operator/ | envsubst | oc apply -f -
       ```
 
-  - Create our Application Specific Configuration
-    ```bash
-    cat ./rhdh-manifests/keycloak/app-config-rhdh.yaml  | envsubst '${NAMESPACE} ${BASEDOMAIN}' | oc apply -n ${NAMESPACE} -f - 
-    ```
-
-    ```bash
-    cat ./rhdh-manifests/keycloak/policy-configmap.yaml  | envsubst '${NAMESPACE}' | oc apply -n ${NAMESPACE} -f -
-    ```
-
   - Create the Red Hat SSO Instance,Realm,Client and User. This will create 3 users admin,user1,user2 all with a password set to the value "test".  Will also wait for Keycloak Instance to be Ready(Can copy all).
     ```bash
+    
     csv=$(oc get subscriptions.operators.coreos.com/rhsso-operator -n ${SSO_NAMESPACE} -o jsonpath='{.status.installedCSV}');
 
+    while [ -z $csv ];do
+    echo -e "Operator Not Yet Installed\n"
+    sleep 5
+    csv=$(oc get subscriptions.operators.coreos.com/rhsso-operator -n ${SSO_NAMESPACE} -o jsonpath='{.status.installedCSV}');   
+    done
   
     oc wait --for=jsonpath='{.status.phase}'=Succeeded ClusterServiceVersion/$csv --allow-missing-template-keys=true --timeout=150s -n $SSO_NAMESPACE;
 
@@ -109,29 +111,26 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
 
     export CLUSTER_NAME="cluster-main"
 
-    oc kustomize ./rhdh-manifests/rhdh-config | envsubst '${NAMESPACE} ${BASEDOMAIN}' | oc apply -n ${NAMESPACE} -f -
+    oc kustomize ./rhdh-manifests/rhdh-config | envsubst '${BACKSTAGE_CR_NAME} ${NAMESPACE} ${BASEDOMAIN}' | oc apply -n ${NAMESPACE} -f -
 
     oc kustomize ./rhdh-manifests/rhdh-kube-setup/ | envsubst |  oc apply -f -
 
     oc kustomize ./rhdh-manifests/rhdh-operator/ | envsubst |  oc apply -f -
-    ``` 
+ 
+    sleep 10
 
+    csv=$(oc get subscriptions.operators.coreos.com/rhdh -n ${RHDH_OPERATOR_NAMESPACE} -o jsonpath='{.status.installedCSV}');
 
-  - Update Helm Information
-    ```bash
-    helm repo update openshift-helm-charts
+    while [ -z $csv ];do
+    echo -e "Operator Not Yet Installed\n"
+    sleep 5
+    csv=$(oc get subscriptions.operators.coreos.com/rhdh -n ${RHDH_OPERATOR_NAMESPACE} -o jsonpath='{.status.installedCSV}'); 
+    done
 
-    helm show values openshift-helm-charts/redhat-developer-hub --version 1.1.0 > ./rhdh-manifests/base/values.yaml
-    ```
+    oc wait --for=jsonpath='{.status.phase}'=Succeeded ClusterServiceVersion/$csv --allow-missing-template-keys=true --timeout=150s -n ${RHDH_OPERATOR_NAMESPACE};
 
-  - Create our Developer Release via Helm(By Merging files manually)
-    ```bash    
-    yq eval-all '. as $item ireduce ({}; . *+ $item)' ./rhdh-manifests/base/values.yaml ./rhdh-manifests/keycloak/values.yaml > ./rhdh-manifests/keycloak/values-new.yaml
+    oc kustomize ./rhdh-manifests/rhdh-cr | envsubst |  oc apply -f -
 
-    helm upgrade -i developer-hub openshift-helm-charts/redhat-developer-hub \
-    --version 1.1.0 \
-    -f ./rhdh-manifests/keycloak/values-new.yaml \
-    -n ${NAMESPACE}
     ```
 
   - It takes a few minutes , but Developer Hub should become available at
@@ -206,12 +205,15 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
 
   - Set your jenkins namespace.An example Jenkins Installation and pipeline are provided. The below command should spin up a Jenkins Instance in namespace 1234-Jenkins, build an agent image and run the pipeline build
 
-    ```bash
+    <!-- ```bash
     ./jenkins/deploy/deploy-script.sh
-    ```
+    ``` -->
+
   - set namespace for Jenkins(From our example above it's 1234-jenkins)
     ```bash
-    export JENKINS_NAMESPACE=1234-jenkins
+    export JENKINS_NAMESPACE=jenkins-test
+    oc new-project $JENKINS_NAMESPACE
+    oc process -f ./jenkins/template.yaml | oc apply -f - -n ${JENKINS_NAMESPACE}
     ```
 
   - Set the Service Account being used for jenkins for authentication, example above used Jenkins.
@@ -232,11 +234,35 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
     ```bash
     TOKEN_SECRET_NAME=$(oc describe sa/${JENKINS_SA} -n ${JENKINS_NAMESPACE} | grep Tokens | head -n 1 | cut -d ":" -f2 | tr -d " ")
 
-    USER_TOKEN=$(oc get secret ${TOKEN_SECRET_NAME} -o=jsonpath={.data.token} -n ${JENKINS_NAMESPACE} | base64 -d)   
+    USER_TOKEN=$(oc get secret ${TOKEN_SECRET_NAME} -o=jsonpath={.data.token} -n ${JENKINS_NAMESPACE} | base64 -d)
+    ```  
 
   - Obtain a Jenkins API token
     ```bash
     export JENKINS_API_TOKEN=$(curl -k -X POST -H "Authorization: Bearer ${USER_TOKEN}" "https://${JENKINS_ROUTE}/user/${JENKINS_USERNAME}/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken" --data 'newTokenName=backstage-token' | jq '.data.tokenValue' | tr -d '"')
+    ```
+ 
+  - Create a sampleJenkinsFile Pipeline
+    ```bash
+      echo """
+      apiVersion: build.openshift.io/v1
+      kind: BuildConfig
+      metadata:
+        name: "test-pipeline"
+        namespace: $JENKINS_NAMESPACE
+        labels:
+          backstage.io/kubernetes-id: 'test-pipeline'
+      spec:
+        source:
+          git:
+            ref: operator
+            uri: 'https://github.com/MoOyeg/rhdh-infra-sample'
+          type: Git
+        strategy:
+          type: "JenkinsPipeline"
+          jenkinsPipelineStrategy:
+            jenkinsfilePath: jenkins/Jenkinsfile
+      """ | oc create -f -
     ```
 
   - We need to create our jenkins secret for backstage to use

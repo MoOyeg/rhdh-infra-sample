@@ -1,10 +1,13 @@
 apiVersion: rhdh.redhat.com/v1alpha1
 kind: Backstage
 metadata:
-  name: developer-hub
+  name: ${BACKSTAGE_CR_NAME}
   namespace: ${NAMESPACE}
 spec:
   application:
+    route:
+      enabled: true
+      subdomain: ${BACKSTAGE_CR_NAME}-developer-hub-${NAMESPACE}
     dynamicPluginsConfigMapName: dynamic-plugins-rhdh
     appConfig:
       configMaps:
@@ -26,29 +29,5 @@ spec:
         - name: backstage-sa-secret
         - name: backstage-sso-secret
     replicas: 1
-    route:
-      enabled: true
   database:
     enableLocalDb: true
-  upstream:
-    backstage:
-      extraAppConfig:
-        - configMapRef: app-config-rhdh
-          filename: app-config-rhdh.yaml
-      extraEnvVars:
-        - name: NODE_TLS_REJECT_UNAUTHORIZED
-          value: '0'
-        - name: LOG_LEVEL
-          value: debug
-      extraEnvVarsSecrets:
-        - backstage-sso-secret
-        - backstage-sa-secret
-      extraVolumeMounts:
-        - mountPath: /opt/app-root/src/rbac
-          name: rbac-policy
-      extraVolumes:
-        - name: rbac-policy
-          configMap:
-            defaultMode: 420
-            name: rbac-policy
-            optional: true

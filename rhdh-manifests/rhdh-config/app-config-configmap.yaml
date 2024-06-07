@@ -7,11 +7,15 @@ data:
   app-config-rhdh.yaml: |
     app:
       title: Red Hat Developer Hub - Test
+      baseUrl: https://${BACKSTAGE_CR_NAME}-developer-hub-${NAMESPACE}.${BASEDOMAIN}
 
     backend:
       auth:
         keys:
           - secret: ${AUTH_SESSION_SECRET}
+      baseUrl: https://${BACKSTAGE_CR_NAME}-developer-hub-${NAMESPACE}.${BASEDOMAIN}
+      cors:
+        origin: https://${BACKSTAGE_CR_NAME}-developer-hub-${NAMESPACE}.${BASEDOMAIN}
 
       reading:
         allow:
