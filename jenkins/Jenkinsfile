@@ -5,7 +5,7 @@ pipeline {
         cloud "openshift"
         containerTemplate {
           name "jnlp"
-          image "registry.redhat.io/openshift3/jenkins-agent-maven-36-rhel7@sha256:f34e5808e759a269872676cf5ba658168a4acbb4bb41790e51b01ffb65124d1d"  
+          image "registry.redhat.io/openshift4/ose-jenkins-agent-maven@sha256:0db8402dc42967436168e045c097709783deafdc9f97e41172bd35344a500138"  
           resourceRequestMemory "500Mi"
           resourceLimitMemory "500Mi"
           resourceRequestCpu "300m"
