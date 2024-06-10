@@ -213,7 +213,7 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
 
   - Set Jenkins username, for example above we use the SA. If different use yours
     ```bash
-    export JENKINS_USERNAME="system:serviceaccount:${JENKINS_NAMESPACE}:${JENKINS_SA}-admin-edit-view"
+    export JENKINS_USERNAME="system:serviceaccount:${JENKINS_NAMESPACE}:${JENKINS_SA}-admin"
     ```
   - Obtain Jenkins route
     ```bash
@@ -228,6 +228,7 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
     ```  
 
   - Obtain a Jenkins API token
+
     ```bash
     export JENKINS_API_TOKEN=$(curl -k -X POST -H "Authorization: Bearer ${USER_TOKEN}" "https://${JENKINS_ROUTE}/user/${JENKINS_USERNAME}/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken" --data 'newTokenName=backstage-token' | jq '.data.tokenValue' | tr -d '"')
     ```

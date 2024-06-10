@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: jenkins-demo-pipeline
+  title: Jenkins Demo Pipeline
+  description: Pipeline Example deployed in Jenkins 
+  links:
+    - url: https://www.postgresql.org
+      title: PostgreSQL website
+      icon: web
+spec:
+  type: pipeline
+  lifecycle: experimental
+  owner: user:default/backstage-admin
+  system: jenkins-demo-system

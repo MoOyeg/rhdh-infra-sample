@@ -1,15 +1,15 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: 'testflask-app'
-  description: 'TestFlask Demo application with exposed API'
+  name: 'jenkins-test-app'
+  description: 'Jenkins Test Application'
   annotations:
-    jenkins.io/job-full-name: '1234-jenkins/1234-jenkins-testflask-pipeline'
-    backstage.io/kubernetes-id: 'testflask'
+    jenkins.io/job-full-name: 'jenkins-test/test-pipeline'
+    backstage.io/kubernetes-id: 'jenkins-test'
 spec:
   type: service
   lifecycle: experimental
   owner: user:default/backstage-admin
-  system: testflask-system
+  system: jenkins-system
   dependsOn:
     - resource:testflask-db

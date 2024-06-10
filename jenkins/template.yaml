@@ -52,6 +52,12 @@ objects:
       labels:
         config.openshift.io/inject-trusted-cabundle: 'true'
       name: '${JENKINS_SERVICE_NAME}-trusted-ca-bundle'
+  - kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: openshift-jenkins-login-plugin-config
+    data:
+      Overall-Administer: 'admin'
   - apiVersion: apps/v1
     kind: Deployment
     metadata:
