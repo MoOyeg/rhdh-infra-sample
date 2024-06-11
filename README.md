@@ -252,7 +252,7 @@ Follow the steps below to install Keycloak and Red Hat Developer Hub:
         name: "test-pipeline"
         namespace: $JENKINS_NAMESPACE
         labels:
-          backstage.io/kubernetes-id: 'test-pipeline'
+          backstage.io/kubernetes-id: 'jenkins-test'
       spec:
         source:
           git:

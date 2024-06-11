@@ -4,7 +4,7 @@ metadata:
   name: 'jenkins-test-app'
   description: 'Jenkins Test Application'
   annotations:
-    jenkins.io/job-full-name: 'jenkins-test/test-pipeline'
+    jenkins.io/job-full-name: 'jenkins-test/jenkins-test-test-pipeline'
     backstage.io/kubernetes-id: 'jenkins-test'
 spec:
   type: service
